@@ -3,3 +3,5 @@
 /frontend/yarn.lock
 /frontend/yarn-error.log
 /frontend/debug.log
+/backend/node_modules/
+/backend/package-lock.json
