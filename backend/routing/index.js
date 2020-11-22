@@ -6,6 +6,7 @@ module.exports = function (app) {
     "/",
     function (req, res, next) {
       console.log("test get");
+      next();
     },
     setTestDataMW(),
     sendJsonMW()
