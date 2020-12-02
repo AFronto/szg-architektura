@@ -1,29 +1,40 @@
 import * as React from "react";
 import "./App.css";
+import Layout from "./components/Navigation/Layout";
+import { NavMenu } from "./components/Navigation/NavMenu";
+import { AuthenticatedRoute } from "./routing/AuthenticatedRoute";
+import { Route } from "react-router";
+import { LogInScreen } from "./components/Auth/LogIn";
+import { RegisterScreen } from "./components/Auth/Register";
+import { TopicsScreen } from "./components/Topics";
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
+///////Test///////
+import { useDispatch } from "react-redux";
+import { loadAuthData } from "./store/Auth";
+/////////////////
 
-export default () => (
-  <div style={{ height: "100%" }}>
-    <h1>Hello</h1>
-  </div>
-);
+export default () => {
+  ///////Test///////
+  const dispatch = useDispatch();
+  dispatch(
+    loadAuthData({
+      jwt: { token: "alma", tokenExpirationTime: "123", id: "alma" },
+    })
+  );
+  /////////////////
+  return (
+    <div style={{ height: "100%" }}>
+      <NavMenu />
+      <Layout>
+        <Route path="/login" component={LogInScreen} />
+        <Route path="/register" component={RegisterScreen} />
+        <AuthenticatedRoute exact path="/">
+          <TopicsScreen />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/topics">
+          <TopicsScreen />
+        </AuthenticatedRoute>
+      </Layout>
+    </div>
+  );
+};
