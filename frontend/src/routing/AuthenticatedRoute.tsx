@@ -23,7 +23,6 @@ export const AuthenticatedRoute: FunctionComponent<IProps> = ({
       tokenExpirationTime: parseInt(
         localStorage.getItem("jwtTokenExpirationTime")!
       ),
-      id: localStorage.getItem("jwtId")!,
     };
     dispatch(loadAuthData({ jwt: jwt }));
 
