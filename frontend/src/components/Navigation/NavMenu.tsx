@@ -16,7 +16,7 @@ export const NavMenu: FunctionComponent = () => {
     <Navbar fixed="top" bg="dark" variant="dark" expand="sm">
       <>
         <Navbar.Brand className="ml-3" href="/">
-          ConsultationSystem
+          Consultation App
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
