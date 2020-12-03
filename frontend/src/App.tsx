@@ -7,6 +7,7 @@ import { Route } from "react-router";
 import { LogInScreen } from "./components/Auth/LogIn";
 import { RegisterScreen } from "./components/Auth/Register";
 import { TopicsScreen } from "./components/Topics";
+import { DetailedTopicScreen } from "./components/Topics/DetailedTopic";
 
 export default () => {
   return (
@@ -20,6 +21,9 @@ export default () => {
         </AuthenticatedRoute>
         <AuthenticatedRoute exact path="/topics">
           <TopicsScreen />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/topics/:id">
+          <DetailedTopicScreen />
         </AuthenticatedRoute>
       </Layout>
     </div>

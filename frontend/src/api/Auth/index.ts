@@ -6,7 +6,7 @@ import { loadAuthData, removeAuthData } from "../../store/Auth";
 import { push } from "connected-react-router";
 import { serverBaseUrl } from "../serverUrl";
 import { addError } from "../../store/Errors";
-import { generateAuthenticationHeadder } from "../Helpers/HeaderHelper";
+import { generateAuthenticationHeader } from "../Helpers/HeaderHelper";
 
 var refreshInterval: { id: NodeJS.Timeout; isSet: boolean } = {
   id: setInterval(() => {}, 1000),
@@ -14,7 +14,7 @@ var refreshInterval: { id: NodeJS.Timeout; isSet: boolean } = {
 };
 
 function refreshToken(dispatch: AppDispatch, getState: () => ReduxState) {
-  const header = generateAuthenticationHeadder(getState());
+  const header = generateAuthenticationHeader(getState());
   return axios({
     method: "POST",
     url: serverBaseUrl + "token",
@@ -58,7 +58,7 @@ export function logOutLocally(dispatch: AppDispatch) {
 
 export function logOut() {
   return (dispatch: AppDispatch, getState: () => ReduxState) => {
-    const header = generateAuthenticationHeadder(getState());
+    const header = generateAuthenticationHeader(getState());
 
     return axios({
       method: "POST",
@@ -110,7 +110,6 @@ export function logIn(loginData: LoginData) {
 }
 
 export function createNewAccount(registerData: RegisterData) {
-  console.log(registerData);
   return (dispatch: AppDispatch, getState: () => ReduxState) => {
     return axios.post(serverBaseUrl + "register", registerData).then(
       (success) => {
