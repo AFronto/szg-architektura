@@ -23,6 +23,7 @@ module.exports = function () {
     res.locals.retData = {
       token: accessToken,
       tokenExpirationTime: expTime,
+      isTeacher: user.isTeacher,
     };
     return next();
   };

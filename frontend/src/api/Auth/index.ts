@@ -8,7 +8,10 @@ import { serverBaseUrl } from "../serverUrl";
 import { addError } from "../../store/Errors";
 import { generateAuthenticationHeadder } from "../Helpers/HeaderHelper";
 
-var refreshInterval: NodeJS.Timeout;
+var refreshInterval: { id: NodeJS.Timeout; isSet: boolean } = {
+  id: setInterval(() => {}, 1000),
+  isSet: false,
+};
 
 function refreshToken(dispatch: AppDispatch, getState: () => ReduxState) {
   const header = generateAuthenticationHeadder(getState());
@@ -24,16 +27,20 @@ function refreshToken(dispatch: AppDispatch, getState: () => ReduxState) {
       ) {
         logOutLocally(dispatch);
       } else {
-        dispatch(loadAuthData({ jwt: success.data }));
+        dispatch(loadAuthData({ auth: success.data }));
       }
     },
-    (error) =>
+    (error) => {
       dispatch(
         addError({
           name: "refreshError",
           description: error.response.data,
         })
-      )
+      );
+      if (error.response.status === 401) {
+        logOutLocally(dispatch);
+      }
+    }
   );
 }
 
@@ -43,7 +50,8 @@ export function isLoggedIn(): boolean {
 }
 
 export function logOutLocally(dispatch: AppDispatch) {
-  clearInterval(refreshInterval);
+  clearInterval(refreshInterval.id);
+  refreshInterval.isSet = false;
   dispatch(removeAuthData());
   dispatch(push("/login"));
 }
@@ -71,15 +79,24 @@ export function logOut() {
   };
 }
 
+export function registerForRefreshingTokens() {
+  return (dispatch: AppDispatch, getState: () => ReduxState) => {
+    if (refreshInterval.isSet === false) {
+      refreshInterval.isSet = true;
+      refreshToken(dispatch, getState);
+      refreshInterval.id = setInterval(() => {
+        refreshToken(dispatch, getState);
+      }, 5000);
+    }
+  };
+}
+
 export function logIn(loginData: LoginData) {
   return (dispatch: AppDispatch, getState: () => ReduxState) => {
     return axios.post(serverBaseUrl + "login", loginData).then(
       (success) => {
-        dispatch(loadAuthData({ jwt: success.data }));
+        dispatch(loadAuthData({ auth: success.data }));
         dispatch(push("/topics"));
-        refreshInterval = setInterval(() => {
-          refreshToken(dispatch, getState);
-        }, 5000);
       },
       (error) =>
         dispatch(
@@ -97,11 +114,8 @@ export function createNewAccount(registerData: RegisterData) {
   return (dispatch: AppDispatch, getState: () => ReduxState) => {
     return axios.post(serverBaseUrl + "register", registerData).then(
       (success) => {
-        dispatch(loadAuthData({ jwt: success.data }));
+        dispatch(loadAuthData({ auth: success.data }));
         dispatch(push("/topics"));
-        refreshInterval = setInterval(() => {
-          refreshToken(dispatch, getState);
-        }, 5000);
       },
       (error) =>
         dispatch(

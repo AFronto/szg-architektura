@@ -3,8 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { Row, Col, Button } from "react-bootstrap";
 import { ReduxState } from "../../store";
 import { TopicCard } from "./TopicCard";
+import { registerForRefreshingTokens } from "../../api/Auth";
 
 export const TopicsScreen: FunctionComponent = () => {
+  const dispatch = useDispatch();
+  dispatch(registerForRefreshingTokens());
   //const topics = useSelector((state: ReduxState) => state.topics);
   const topics = [
     { id: "1", name: "elso", description: "test" },

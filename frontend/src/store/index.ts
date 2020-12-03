@@ -5,14 +5,14 @@ import {
 } from "@reduxjs/toolkit";
 import { connectRouter, routerMiddleware } from "connected-react-router";
 import thunk from "redux-thunk";
-import jwt from "./Auth";
+import auth from "./Auth";
 import history from "./applicationHistory";
 import errors from "./Errors";
 import topics from "./Topic";
 
 const rootReducer = combineReducers({
   router: connectRouter(history),
-  jwt: jwt,
+  auth: auth,
   errors: errors,
   topics: topics,
 });

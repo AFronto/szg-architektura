@@ -18,13 +18,14 @@ export const AuthenticatedRoute: FunctionComponent<IProps> = ({
   const dispatch = useDispatch();
 
   if (isLoggedIn()) {
-    const jwt: AuthData = {
+    const auth: AuthData = {
       token: localStorage.getItem("jwtToken")!,
       tokenExpirationTime: parseInt(
         localStorage.getItem("jwtTokenExpirationTime")!
       ),
+      isTeacher: localStorage.getItem("isTeacher")! === "true",
     };
-    dispatch(loadAuthData({ jwt: jwt }));
+    dispatch(loadAuthData({ auth: auth }));
 
     return <Route {...rest} render={({ location }) => children} />;
   }

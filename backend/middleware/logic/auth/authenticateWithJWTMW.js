@@ -17,6 +17,7 @@ module.exports = function () {
 
         req.email = content.email;
         var timeTillExp = (content.expirationDate - Date.now()) / 1000;
+        process.stdout.write(`\tTime remaining: `);
         console.log(timeTillExp);
         if (timeTillExp < 0) {
           return res.status(401).redirect(

@@ -2,20 +2,22 @@ import { createSlice } from "@reduxjs/toolkit";
 import AuthData from "../../data/server/Auth/AuthData";
 
 const authSlice = createSlice({
-  name: "jwt",
+  name: "auth",
   initialState: {} as AuthData,
   reducers: {
     loadAuthData(_state, action) {
-      localStorage.setItem("jwtToken", action.payload.jwt.token);
+      localStorage.setItem("jwtToken", action.payload.auth.token);
       localStorage.setItem(
         "jwtTokenExpirationTime",
-        action.payload.jwt.tokenExpirationTime
+        action.payload.auth.tokenExpirationTime
       );
-      return action.payload.jwt;
+      localStorage.setItem("isTeacher", action.payload.auth.isTeacher);
+      return action.payload.auth;
     },
     removeAuthData() {
       localStorage.removeItem("jwtToken");
       localStorage.removeItem("jwtTokenExpirationTime");
+      localStorage.removeItem("isTeacher");
       return {} as AuthData;
     },
   },

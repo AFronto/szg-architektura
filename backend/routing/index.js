@@ -7,14 +7,14 @@ const authenticateUserMW = require("../middleware/logic/auth/authenticateUserMW"
 const authenticateWithJWTMW = require("../middleware/logic/auth/authenticateWithJWTMW");
 const passwordHasherMW = require("../middleware/logic/auth/passwordHasherMW");
 const validatePasswordMW = require("../middleware/logic/auth/validatePasswordMW");
-const logIncomingCall = require("../middleware/logic/log/logIncomingCall");
+const logIncomingCallMW = require("../middleware/logic/log/logIncomingCallMW");
 const sendJsonMW = require("../middleware/logic/sendJsonMW");
 const objRepo = require("../models/objecRepository");
 
 module.exports = function (app) {
   app.post(
     "/register",
-    logIncomingCall(),
+    logIncomingCallMW(),
     passwordHasherMW(),
     createUserForRegisterMW(objRepo),
     authenticateUserMW(),
@@ -24,7 +24,7 @@ module.exports = function (app) {
 
   app.post(
     "/login",
-    logIncomingCall(),
+    logIncomingCallMW(),
     getUserForLoginMW(objRepo),
     passwordHasherMW(),
     validatePasswordMW(),
@@ -35,7 +35,7 @@ module.exports = function (app) {
 
   app.post(
     "/token",
-    logIncomingCall(),
+    logIncomingCallMW(),
     authenticateWithJWTMW(),
     getUserMW(objRepo),
     authenticateUserMW(),
@@ -45,7 +45,7 @@ module.exports = function (app) {
 
   app.post(
     "/logout",
-    logIncomingCall(),
+    logIncomingCallMW(),
     authenticateWithJWTMW(),
     getUserMW(objRepo),
     logUserOutMW(),
@@ -54,7 +54,7 @@ module.exports = function (app) {
 
   app.get(
     "/force-logout",
-    logIncomingCall(),
+    logIncomingCallMW(),
     getUserMW(objRepo),
     logUserOutMW(),
     sendJsonMW()
