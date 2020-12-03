@@ -6,13 +6,15 @@ import {
 import { connectRouter, routerMiddleware } from "connected-react-router";
 import thunk from "redux-thunk";
 import jwt from "./Auth";
-import history from "./applcationHistory";
+import history from "./applicationHistory";
 import errors from "./Errors";
+import topics from "./Topic";
 
 const rootReducer = combineReducers({
   router: connectRouter(history),
   jwt: jwt,
   errors: errors,
+  topics: topics,
 });
 
 const middleware = [
