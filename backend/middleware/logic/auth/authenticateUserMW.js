@@ -14,14 +14,13 @@ module.exports = function () {
 
     const accessToken = jwt.sign(
       {
-        username: user.userName,
-        isTeacher: user.isTeacher,
+        email: user.email,
         expirationDate: Date.now() + expTime * 1000,
       },
       accessTokenSecret
     );
 
-    res.retData = {
+    res.locals.retData = {
       token: accessToken,
       tokenExpirationTime: expTime,
     };

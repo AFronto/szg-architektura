@@ -40,7 +40,7 @@ export const NavMenu: FunctionComponent = () => {
               >
                 Profile
               </Link>
-              <Nav.Link onClick={() => logOut(dispatch)}>Log Out</Nav.Link>
+              <Nav.Link onClick={() => dispatch(logOut())}>Log Out</Nav.Link>
             </Nav>
           ) : (
             <Nav className="ml-auto mr-3">

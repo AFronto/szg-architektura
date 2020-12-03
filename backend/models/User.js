@@ -5,7 +5,7 @@ const User = db.model("User", {
   userName: String,
   passwordHash: String,
   isTeacher: Boolean,
-  isLoggedIn: Boolean,
+  isLogedIn: Boolean,
   salt: String,
 });
 
