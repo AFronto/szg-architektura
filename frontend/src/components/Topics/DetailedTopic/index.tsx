@@ -65,6 +65,7 @@ export const DetailedTopicScreen: FunctionComponent = () => {
           text: "almaspite",
         },
       ],
+      isPrivate: false,
     },
     {
       id: "2",
@@ -87,12 +88,14 @@ export const DetailedTopicScreen: FunctionComponent = () => {
           text: "sad",
         },
       ],
+      isPrivate: false,
     },
     {
       id: "3",
       owner: { id: "xyzw", email: "xyzw", userName: "Éva", isTeacher: false },
       text: "hello?",
       replies: [],
+      isPrivate: false,
     },
   ];
 
