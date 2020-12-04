@@ -26,6 +26,7 @@ export const TopicsScreen: FunctionComponent = () => {
   }, []);
 
   const topics = useSelector((state: ReduxState) => state.topics);
+  const user = useSelector((state: ReduxState) => state.user);
 
   return (
     <>

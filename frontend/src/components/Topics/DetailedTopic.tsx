@@ -1,14 +1,41 @@
 import React, { FunctionComponent } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import * as yup from "yup";
 import { registerForRefreshingTokens } from "../../api/Auth";
+import { addQuestion } from "../../store/Topic/QuestionSlice";
 import { QuestionCard } from "./QuestionCard";
 
 export const DetailedTopicScreen: FunctionComponent = () => {
   const dispatch = useDispatch();
   dispatch(registerForRefreshingTokens());
   var { id } = useParams();
+
+  const schema = yup.object({
+    name: yup.string().required(),
+  });
+
+  const { handleSubmit, errors } = useForm({
+    validationSchema: schema,
+  });
+
+  const onSubmit = handleSubmit((data) => {
+    const questionToSend = {
+      id: data.id,
+      owner: data.owner,
+      text: data.questions,
+      replies: [],
+    };
+
+    dispatch(
+      addQuestion({
+        newReply: questionToSend,
+      })
+    );
+    //dispatch(createNewReply(replyToSend));
+  });
 
   const questions = [
     {
@@ -75,6 +102,17 @@ export const DetailedTopicScreen: FunctionComponent = () => {
           </Col>
         ))}
       </Row>
+      <Col md={12} style={{ marginTop: 40 }}>
+        <Form noValidate onSubmit={onSubmit}>
+          <Form.Group controlId="formQuestion">
+            <Form.Control placeholder="Enter your question" />
+          </Form.Group>
+
+          <Button variant="primary" type="submit">
+            Post your question!
+          </Button>
+        </Form>
+      </Col>
     </>
   );
 };
