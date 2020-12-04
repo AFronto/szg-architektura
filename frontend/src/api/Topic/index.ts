@@ -1,8 +1,11 @@
 import axios from "axios";
 import TopicData from "../../data/server/Topic/TopicData";
 import { AppDispatch, ReduxState } from "../../store";
+import { addError } from "../../store/Errors";
+import { logOutLocally } from "../Auth";
 import { generateAuthenticationHeader } from "../Helpers/HeaderHelper";
 import { serverBaseUrl } from "../serverUrl";
+import { loadTopics, updateTopic, removeTopic } from "../../store/Topic";
 
 export function getTopics() {
   return (dispatch: AppDispatch, getState: () => ReduxState) => {
@@ -12,7 +15,29 @@ export function getTopics() {
       method: "GET",
       url: serverBaseUrl + "topics",
       headers: header,
-    }).then();
+    }).then(
+      (success) => {
+        if (
+          success.data.logedOut !== undefined &&
+          success.data.logedOut === true
+        ) {
+          logOutLocally(dispatch);
+        } else {
+          dispatch(loadTopics({ topicList: success.data }));
+        }
+      },
+      (error) => {
+        dispatch(
+          addError({
+            name: "getAllTopicsError",
+            description: error.response.data,
+          })
+        );
+        if (error.response.status === 401) {
+          logOutLocally(dispatch);
+        }
+      }
+    );
   };
 }
 
@@ -22,10 +47,38 @@ export function createNewTopic(topicData: TopicData) {
 
     return axios({
       method: "POST",
-      url: serverBaseUrl + "topics/create",
+      url: serverBaseUrl + "topics",
       headers: header,
       data: topicData,
-    }).then();
+    }).then(
+      (success) => {
+        if (
+          success.data.logedOut !== undefined &&
+          success.data.logedOut === true
+        ) {
+          logOutLocally(dispatch);
+        } else {
+          dispatch(
+            updateTopic({
+              threadId: topicData.id,
+              updatedThread: { ...topicData, id: success.data.id },
+            })
+          );
+        }
+      },
+      (error) => {
+        dispatch(removeTopic({ topicId: topicData.id }));
+        dispatch(
+          addError({
+            name: "createTopicError",
+            description: error.response.data,
+          })
+        );
+        if (error.response.status === 401) {
+          logOutLocally(dispatch);
+        }
+      }
+    );
   };
 }
 

@@ -1,3 +1,5 @@
+const createTopicMW = require("../middleware/data/topic/createTopicMW");
+const getAllTopicsOnlyMW = require("../middleware/data/topic/getAllTopicsOnlyMW");
 const createUserForRegisterMW = require("../middleware/data/user/createUserForRegisterMW");
 const getUserForLoginMW = require("../middleware/data/user/getUserForLoginMW");
 const getUserMW = require("../middleware/data/user/getUserMW");
@@ -5,6 +7,7 @@ const logUserInMW = require("../middleware/data/user/logUserInMW");
 const logUserOutMW = require("../middleware/data/user/logUserOutMW");
 const authenticateUserMW = require("../middleware/logic/auth/authenticateUserMW");
 const authenticateWithJWTMW = require("../middleware/logic/auth/authenticateWithJWTMW");
+const onlyTeacherMW = require("../middleware/logic/auth/onlyTeacherMW");
 const passwordHasherMW = require("../middleware/logic/auth/passwordHasherMW");
 const validatePasswordMW = require("../middleware/logic/auth/validatePasswordMW");
 const logIncomingCallMW = require("../middleware/logic/log/logIncomingCallMW");
@@ -12,6 +15,7 @@ const sendJsonMW = require("../middleware/logic/sendJsonMW");
 const objRepo = require("../models/objecRepository");
 
 module.exports = function (app) {
+  //Authentication
   app.post(
     "/register",
     logIncomingCallMW(),
@@ -57,6 +61,26 @@ module.exports = function (app) {
     logIncomingCallMW(),
     getUserMW(objRepo),
     logUserOutMW(),
+    sendJsonMW()
+  );
+
+  //Topic
+  app.get(
+    "/topics",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getAllTopicsOnlyMW(objRepo),
+    sendJsonMW()
+  );
+
+  app.post(
+    "/topics",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    onlyTeacherMW(),
+    createTopicMW(objRepo),
     sendJsonMW()
   );
 };
