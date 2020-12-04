@@ -1,11 +1,12 @@
 import React, { FunctionComponent, useEffect } from "react";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import * as yup from "yup";
 import { initializeScreen } from "../../../api/Auth";
-import { getSingleTopic } from "../../../api/Topic";
+import { getSingleTopic, getTopics } from "../../../api/Topic";
+import { ReduxState } from "../../../store";
 import { addQuestion } from "../../../store/Topic/QuestionSlice";
 import { QuestionList } from "./QuestionList";
 
@@ -15,6 +16,8 @@ export const DetailedTopicScreen: FunctionComponent = () => {
 
   useEffect(() => {
     dispatch(initializeScreen());
+    dispatch(getTopics());
+    dispatch(getSingleTopic(id));
   }, []);
 
   const schema = yup.object({
@@ -41,7 +44,10 @@ export const DetailedTopicScreen: FunctionComponent = () => {
     //dispatch(createNewReply(replyToSend));
   });
 
-  const topic = dispatch(getSingleTopic(id));
+  const topic = useSelector((state: ReduxState) => state.topics).find(
+    (t) => t.id === id
+  );
+  const user = useSelector((state: ReduxState) => state.user);
 
   const questions = [
     {
@@ -101,14 +107,29 @@ export const DetailedTopicScreen: FunctionComponent = () => {
 
   return (
     <>
-      <h1>{topic.name}</h1>
-      <h1>topic.description</h1>
-      <h1>questions</h1>
-      <Row>
-        <Col xs={12}>
-          <QuestionList questions={questions} />
-        </Col>
-      </Row>
+      {topic !== undefined ? (
+        <>
+          <div className="d-flex justify-content-between">
+            <h1>{topic.name}</h1>
+            {user.isTeacher && user.id === topic.owner.id && (
+              <Button size="lg" variant="danger" onClick={() => {}}>
+                Delete
+              </Button>
+            )}
+          </div>
+          <h1>topic.description</h1>
+          <h1>questions</h1>
+          <Row>
+            <Col xs={12}>
+              <QuestionList questions={questions} />
+            </Col>
+          </Row>
+        </>
+      ) : (
+        <div className="d-flex justify-content-center align-items-center h-100">
+          <Spinner animation="border" />
+        </div>
+      )}
     </>
   );
 };

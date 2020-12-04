@@ -1,3 +1,4 @@
+import { push } from "connected-react-router";
 import React, { FunctionComponent } from "react";
 import { Card, Button, Badge } from "react-bootstrap";
 import { useDispatch } from "react-redux";
@@ -12,7 +13,12 @@ export const TopicCard: FunctionComponent<{ topic: TopicData }> = (props) => {
       <Card.Body>
         {props.topic.description}
         <div className="d-flex justify-content-end">
-          <Button variant="success" onClick={() => {}}>
+          <Button
+            variant="success"
+            onClick={() => {
+              dispatch(push(`/topics/${props.topic.id}`));
+            }}
+          >
             View Topic
           </Button>
         </div>
