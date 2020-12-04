@@ -11,13 +11,11 @@ const authSlice = createSlice({
         "jwtTokenExpirationTime",
         action.payload.auth.tokenExpirationTime
       );
-      localStorage.setItem("isTeacher", action.payload.auth.isTeacher);
       return action.payload.auth;
     },
     removeAuthData() {
       localStorage.removeItem("jwtToken");
       localStorage.removeItem("jwtTokenExpirationTime");
-      localStorage.removeItem("isTeacher");
       return {} as AuthData;
     },
   },

@@ -10,11 +10,10 @@ import { ReduxState } from "../../store";
 import { TopicCard } from "./TopicCard";
 import { getTopics } from "../../api/Topic";
 import { TopicModal } from "./TopicModal";
-import { registerForRefreshingTokens } from "../../api/Auth";
+import { initializeScreen } from "../../api/Auth";
 
 export const TopicsScreen: FunctionComponent = () => {
   const dispatch = useDispatch();
-  dispatch(registerForRefreshingTokens());
 
   const [show, setShow] = useState(false);
 
@@ -23,6 +22,7 @@ export const TopicsScreen: FunctionComponent = () => {
 
   useEffect(() => {
     dispatch(getTopics());
+    dispatch(initializeScreen());
   }, []);
 
   const topics = useSelector((state: ReduxState) => state.topics);

@@ -9,6 +9,7 @@ const authenticateUserMW = require("../middleware/logic/auth/authenticateUserMW"
 const authenticateWithJWTMW = require("../middleware/logic/auth/authenticateWithJWTMW");
 const onlyTeacherMW = require("../middleware/logic/auth/onlyTeacherMW");
 const passwordHasherMW = require("../middleware/logic/auth/passwordHasherMW");
+const sendBackActualUserMW = require("../middleware/logic/auth/sendBackActualUserMW");
 const validatePasswordMW = require("../middleware/logic/auth/validatePasswordMW");
 const logIncomingCallMW = require("../middleware/logic/log/logIncomingCallMW");
 const sendJsonMW = require("../middleware/logic/sendJsonMW");
@@ -61,6 +62,15 @@ module.exports = function (app) {
     logIncomingCallMW(),
     getUserMW(objRepo),
     logUserOutMW(),
+    sendJsonMW()
+  );
+
+  app.get(
+    "/user",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    sendBackActualUserMW(),
     sendJsonMW()
   );
 

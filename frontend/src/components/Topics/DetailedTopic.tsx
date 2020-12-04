@@ -1,17 +1,20 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import * as yup from "yup";
-import { registerForRefreshingTokens } from "../../api/Auth";
+import { initializeScreen } from "../../api/Auth";
 import { addQuestion } from "../../store/Topic/QuestionSlice";
 import { QuestionCard } from "./QuestionCard";
 
 export const DetailedTopicScreen: FunctionComponent = () => {
   const dispatch = useDispatch();
-  dispatch(registerForRefreshingTokens());
   var { id } = useParams();
+
+  useEffect(() => {
+    dispatch(initializeScreen());
+  }, []);
 
   const schema = yup.object({
     name: yup.string().required(),
