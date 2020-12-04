@@ -29,6 +29,8 @@ export const TopicModal: FunctionComponent<{
       id: props.topic ? props.topic.id : "fake_id",
       name: data.name,
       description: data.description,
+      owner: data.owner,
+      questions: data.questions,
     };
 
     if (props.isNew) {
