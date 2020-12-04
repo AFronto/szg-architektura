@@ -48,15 +48,17 @@ export const TopicsScreen: FunctionComponent = () => {
           marginRight: 30,
         }}
       >
-        <Button
-          size="lg"
-          variant="success"
-          onClick={() => {
-            handleShow();
-          }}
-        >
-          Add
-        </Button>
+        {user.isTeacher && (
+          <Button
+            size="lg"
+            variant="success"
+            onClick={() => {
+              handleShow();
+            }}
+          >
+            Add
+          </Button>
+        )}
       </div>
 
       <TopicModal model={{ show, handleClose }} isNew={true} />

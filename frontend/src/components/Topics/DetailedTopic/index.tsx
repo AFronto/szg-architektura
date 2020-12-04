@@ -4,9 +4,10 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import * as yup from "yup";
-import { initializeScreen } from "../../api/Auth";
-import { addQuestion } from "../../store/Topic/QuestionSlice";
-import { QuestionCard } from "./QuestionCard";
+import { initializeScreen } from "../../../api/Auth";
+import { getSingleTopic } from "../../../api/Topic";
+import { addQuestion } from "../../../store/Topic/QuestionSlice";
+import { QuestionList } from "./QuestionList";
 
 export const DetailedTopicScreen: FunctionComponent = () => {
   const dispatch = useDispatch();
@@ -39,6 +40,8 @@ export const DetailedTopicScreen: FunctionComponent = () => {
     );
     //dispatch(createNewReply(replyToSend));
   });
+
+  const topic = dispatch(getSingleTopic(id));
 
   const questions = [
     {
@@ -95,27 +98,14 @@ export const DetailedTopicScreen: FunctionComponent = () => {
 
   return (
     <>
-      <h1>name</h1>
-      <h1>description</h1>
+      <h1>{topic.name}</h1>
+      <h1>topic.description</h1>
       <h1>questions</h1>
       <Row>
-        {questions.map((question) => (
-          <Col xs={12}>
-            <QuestionCard question={question} />
-          </Col>
-        ))}
+        <Col xs={12}>
+          <QuestionList questions={questions} />
+        </Col>
       </Row>
-      <Col md={12} style={{ marginTop: 40 }}>
-        <Form noValidate onSubmit={onSubmit}>
-          <Form.Group controlId="formQuestion">
-            <Form.Control placeholder="Enter your question" />
-          </Form.Group>
-
-          <Button variant="primary" type="submit">
-            Post your question!
-          </Button>
-        </Form>
-      </Col>
     </>
   );
 };

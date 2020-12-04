@@ -3,7 +3,7 @@ import UserData from "../../data/server/User/UserData";
 
 const userSlice = createSlice({
   name: "user",
-  initialState: [] as UserData[],
+  initialState: {} as UserData,
   reducers: {
     loadUser(_state, action) {
       return action.payload.user;

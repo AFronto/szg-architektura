@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Card, Col } from "react-bootstrap";
-import ReplyData from "../../data/server/Topic/ReplyData";
+import ReplyData from "../../../data/server/Topic/ReplyData";
 
 export const Reply: FunctionComponent<{ reply: ReplyData }> = (props) => {
   return (

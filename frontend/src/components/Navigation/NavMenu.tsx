@@ -11,12 +11,14 @@ export const NavMenu: FunctionComponent = () => {
   );
 
   const dispatch = useDispatch();
+  const user = useSelector((state: ReduxState) => state.user);
 
   return (
     <Navbar fixed="top" bg="dark" variant="dark" expand="sm">
       <>
         <Navbar.Brand className="ml-3" href="/">
           Consultation App
+          {user.userName ? " logged in as: " + user.userName : ""}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

@@ -54,6 +54,7 @@ export function logOutLocally(dispatch: AppDispatch) {
   clearInterval(refreshInterval.id);
   refreshInterval.isSet = false;
   dispatch(removeAuthData());
+  dispatch(loadUser({ user: {} }));
   dispatch(push("/login"));
 }
 
