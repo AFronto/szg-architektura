@@ -5,7 +5,13 @@ import { addError } from "../../store/Errors";
 import { logOutLocally } from "../Auth";
 import { generateAuthenticationHeader } from "../Helpers/HeaderHelper";
 import { serverBaseUrl } from "../serverUrl";
-import { loadTopics, updateTopic, removeTopic } from "../../store/Topic";
+import {
+  loadTopics,
+  updateTopic,
+  removeTopic,
+  addTopic,
+} from "../../store/Topic";
+import { push } from "connected-react-router";
 
 export function getTopics() {
   return (dispatch: AppDispatch, getState: () => ReduxState) => {
@@ -60,8 +66,9 @@ export function createNewTopic(topicData: TopicData) {
         } else {
           dispatch(
             updateTopic({
-              threadId: topicData.id,
-              updatedThread: { ...topicData, id: success.data.id },
+              topicId: topicData.id,
+              owner: topicData.owner,
+              updatedTopic: { ...topicData, id: success.data.id },
             })
           );
         }
@@ -90,7 +97,30 @@ export function deleteTopic(topicData: TopicData) {
       method: "DELETE",
       url: serverBaseUrl + "topics/" + topicData.id,
       headers: header,
-    }).then();
+    }).then(
+      (success) => {
+        if (
+          success.data.logedOut !== undefined &&
+          success.data.logedOut === true
+        ) {
+          logOutLocally(dispatch);
+        } else {
+          dispatch(push("/topics"));
+        }
+      },
+      (error) => {
+        dispatch(addTopic({ newTopic: topicData }));
+        dispatch(
+          addError({
+            name: "deleteTopicError",
+            description: error.response.data,
+          })
+        );
+        if (error.response.status === 401) {
+          logOutLocally(dispatch);
+        }
+      }
+    );
   };
 }
 

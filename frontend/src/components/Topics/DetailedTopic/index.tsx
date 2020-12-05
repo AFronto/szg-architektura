@@ -1,3 +1,4 @@
+import { push } from "connected-react-router";
 import React, { FunctionComponent, useEffect } from "react";
 import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
@@ -5,8 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import * as yup from "yup";
 import { initializeScreen } from "../../../api/Auth";
-import { getSingleTopic, getTopics } from "../../../api/Topic";
+import { deleteTopic, getSingleTopic, getTopics } from "../../../api/Topic";
 import { ReduxState } from "../../../store";
+import { removeTopic } from "../../../store/Topic";
 import { addQuestion } from "../../../store/Topic/QuestionSlice";
 import { QuestionList } from "./QuestionList";
 
@@ -48,6 +50,11 @@ export const DetailedTopicScreen: FunctionComponent = () => {
     (t) => t.id === id
   );
   const user = useSelector((state: ReduxState) => state.user);
+
+  const deleteTopicPressed = () => {
+    dispatch(removeTopic({ topicId: topic!.id }));
+    dispatch(deleteTopic(topic!));
+  };
 
   const questions = [
     {
@@ -112,7 +119,7 @@ export const DetailedTopicScreen: FunctionComponent = () => {
           <div className="d-flex justify-content-between">
             <h1>{topic.name}</h1>
             {user.isTeacher && user.id === topic.owner.id && (
-              <Button size="lg" variant="danger" onClick={() => {}}>
+              <Button size="lg" variant="danger" onClick={deleteTopicPressed}>
                 Delete
               </Button>
             )}

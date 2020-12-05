@@ -16,7 +16,15 @@ module.exports = function (objectrepository) {
       if (err) {
         return res.status(400).send("Cannot create topic!");
       }
-      res.locals.retData = { id: successful_topic.id };
+      res.locals.retData = {
+        id: successful_topic.id,
+        owner: {
+          id: req.user.id,
+          email: req.user.email,
+          userName: req.user.userName,
+          isTeacher: req.user.isTeacher,
+        },
+      };
       return next();
     });
   };

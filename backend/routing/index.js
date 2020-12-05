@@ -1,5 +1,7 @@
 const createTopicMW = require("../middleware/data/topic/createTopicMW");
+const deleteTopicMW = require("../middleware/data/topic/deleteTopicMW");
 const getAllTopicsOnlyMW = require("../middleware/data/topic/getAllTopicsOnlyMW");
+const getSingleTopicMW = require("../middleware/data/topic/getSingleTopicMW");
 const createUserForRegisterMW = require("../middleware/data/user/createUserForRegisterMW");
 const getUserForLoginMW = require("../middleware/data/user/getUserForLoginMW");
 const getUserMW = require("../middleware/data/user/getUserMW");
@@ -91,6 +93,16 @@ module.exports = function (app) {
     getUserMW(objRepo),
     onlyTeacherMW(),
     createTopicMW(objRepo),
+    sendJsonMW()
+  );
+
+  app.delete(
+    "/topics/:id",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getSingleTopicMW(objRepo),
+    deleteTopicMW(objRepo),
     sendJsonMW()
   );
 };

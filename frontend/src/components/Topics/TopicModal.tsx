@@ -7,6 +7,7 @@ import TopicData from "../../data/server/Topic/TopicData";
 import { addTopic, updateTopic } from "../../store/Topic";
 import { createNewTopic, editTopic } from "../../api/Topic";
 import ModalModel from "../../data/ModalModel";
+import UserData from "../../data/server/User/UserData";
 
 export const TopicModal: FunctionComponent<{
   model: ModalModel;
@@ -29,8 +30,8 @@ export const TopicModal: FunctionComponent<{
       id: props.topic ? props.topic.id : "fake_id",
       name: data.name,
       description: data.description,
-      owner: data.owner,
-      questions: data.questions,
+      owner: props.topic ? props.topic.owner : ({} as UserData),
+      questions: props.topic ? props.topic.questions : [],
     };
 
     if (props.isNew) {
