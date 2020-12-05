@@ -11,6 +11,7 @@ module.exports = function () {
         userName: req.topic.owner.userName,
         isTeacher: req.topic.owner.isTeacher,
       },
+      deadlines: req.topic.deadlines,
       questions: req.topic.questions.map((q) => {
         return {
           ...q,

@@ -14,6 +14,9 @@ module.exports = function (objectrepository) {
         path: "questions",
       })
       .populate({
+        path: "deadlines",
+      })
+      .populate({
         path: "questions",
         populate: {
           path: "replies",
