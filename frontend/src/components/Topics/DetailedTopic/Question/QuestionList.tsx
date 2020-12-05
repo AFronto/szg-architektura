@@ -4,8 +4,8 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
-import QuestionData from "../../../data/server/Topic/QuestionData";
-import { addReply } from "../../../store/Topic/ReplySlice";
+import QuestionData from "../../../../data/server/Topic/QuestionData";
+import { addReply } from "../../../../store/Topic";
 import { QuestionCard } from "./QuestionCard";
 
 export const QuestionList: FunctionComponent<{

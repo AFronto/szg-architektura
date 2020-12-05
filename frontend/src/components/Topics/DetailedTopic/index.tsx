@@ -13,53 +13,16 @@ import * as yup from "yup";
 import { initializeScreen } from "../../../api/Auth";
 import { deleteTopic, getSingleTopic, getTopics } from "../../../api/Topic";
 import { ReduxState } from "../../../store";
-import { removeTopic } from "../../../store/Topic";
-import { addQuestion } from "../../../store/Topic/QuestionSlice";
+import { addQuestion, removeTopic, updateTopic } from "../../../store/Topic";
 import { WrapperCard } from "./WrapperCard";
 
 export const DetailedTopicScreen: FunctionComponent = () => {
   const dispatch = useDispatch();
   var { id } = useParams();
 
-  useEffect(() => {
-    dispatch(initializeScreen());
-    dispatch(getTopics());
-    dispatch(getSingleTopic(id));
-  }, []);
-
-  const schema = yup.object({
-    name: yup.string().required(),
-  });
-
-  const { handleSubmit, errors } = useForm({
-    validationSchema: schema,
-  });
-
-  const onSubmit = handleSubmit((data) => {
-    const questionToSend = {
-      id: data.id,
-      owner: data.owner,
-      text: data.questions,
-      replies: [],
-    };
-
-    dispatch(
-      addQuestion({
-        newReply: questionToSend,
-      })
-    );
-    //dispatch(createNewReply(replyToSend));
-  });
-
   const topic = useSelector((state: ReduxState) => state.topics).find(
     (t) => t.id === id
   );
-  const user = useSelector((state: ReduxState) => state.user);
-
-  const deleteTopicPressed = () => {
-    dispatch(removeTopic({ topicId: topic!.id }));
-    dispatch(deleteTopic(topic!));
-  };
 
   const questions = [
     {
@@ -116,7 +79,6 @@ export const DetailedTopicScreen: FunctionComponent = () => {
       isPrivate: false,
     },
   ];
-
   const deadlines = [
     {
       id: "1",
@@ -140,6 +102,50 @@ export const DetailedTopicScreen: FunctionComponent = () => {
       isDone: false,
     },
   ];
+
+  useEffect(() => {
+    dispatch(initializeScreen());
+    dispatch(getTopics());
+    dispatch(getSingleTopic(id));
+    dispatch(
+      updateTopic({
+        topicId: id,
+        updatedTopic: { ...topic, questions: questions },
+      })
+    );
+  }, []);
+
+  const schema = yup.object({
+    name: yup.string().required(),
+  });
+
+  const { handleSubmit, errors } = useForm({
+    validationSchema: schema,
+  });
+
+  const onSubmit = handleSubmit((data) => {
+    const questionToSend = {
+      id: data.id,
+      owner: data.owner,
+      text: data.questions,
+      replies: [],
+    };
+
+    dispatch(
+      addQuestion({
+        parentTopicId: id,
+        newReply: questionToSend,
+      })
+    );
+    //dispatch(createNewReply(replyToSend));
+  });
+
+  const user = useSelector((state: ReduxState) => state.user);
+
+  const deleteTopicPressed = () => {
+    dispatch(removeTopic({ topicId: topic!.id }));
+    dispatch(deleteTopic(topic!));
+  };
 
   return (
     <>
@@ -172,7 +178,7 @@ export const DetailedTopicScreen: FunctionComponent = () => {
                 data={{
                   header: "Public Questions",
                   show: true,
-                  questions: questions,
+                  questions: topic.questions,
                 }}
               />
             </Col>
@@ -183,7 +189,7 @@ export const DetailedTopicScreen: FunctionComponent = () => {
                 data={{
                   header: "Private Questions",
                   show: false,
-                  questions: questions,
+                  questions: topic.questions,
                 }}
               />
             </Col>

@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Col, Row } from "react-bootstrap";
 import * as yup from "yup";
-import DeadlineData from "../../../data/server/Topic/DeadlineData";
+import DeadlineData from "../../../../data/server/Topic/DeadlineData";
 import { DeadlineCard } from "./DeadlineCard";
 
 export const DeadlineList: FunctionComponent<{

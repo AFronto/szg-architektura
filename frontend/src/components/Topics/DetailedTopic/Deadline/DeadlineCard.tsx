@@ -3,7 +3,7 @@ import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
-import DeadlineData from "../../../data/server/Topic/DeadlineData";
+import DeadlineData from "../../../../data/server/Topic/DeadlineData";
 
 export const DeadlineCard: FunctionComponent<{ deadline: DeadlineData }> = (
   props
@@ -66,7 +66,7 @@ export const DeadlineCard: FunctionComponent<{ deadline: DeadlineData }> = (
                 <Button variant="secondary" type="submit">
                   Add Link
                 </Button>
-                <Button variant="success" onClick={switchStatus}>
+                <Button variant="secondary" onClick={switchStatus}>
                   {deadline.isDone ? "Reopen" : "Finish"}
                 </Button>
               </div>

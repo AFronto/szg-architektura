@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { FunctionComponent } from "react";
 import { Button, Card, Col } from "react-bootstrap";
 import WrapperData from "../../../data/client/Wrapper/WrapperData";
-import { DeadlineCard } from "./DeadlineCard";
-import { DeadlineList } from "./DeadlineList";
-import { QuestionList } from "./QuestionList";
+import { DeadlineCard } from "./Deadline/DeadlineCard";
+import { DeadlineList } from "./Deadline/DeadlineList";
+import { QuestionList } from "./Question/QuestionList";
 
 export const WrapperCard: FunctionComponent<{
   data: WrapperData;
@@ -22,7 +22,7 @@ export const WrapperCard: FunctionComponent<{
       className="mx-auto"
       border="primary"
     >
-      <Card.Header as="h5" style={{ background: "#006400", color: "white" }}>
+      <Card.Header as="h5" style={{ background: "DarkGray", color: "black" }}>
         <div className="d-flex justify-content-between">
           {data.header}
           <Button
