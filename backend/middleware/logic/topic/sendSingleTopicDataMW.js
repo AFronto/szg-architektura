@@ -11,10 +11,21 @@ module.exports = function () {
         userName: req.topic.owner.userName,
         isTeacher: req.topic.owner.isTeacher,
       },
-      deadlines: req.topic.deadlines,
+      deadlines: req.topic.deadlines.map((d) => {
+        return {
+          id: d.id,
+          description: d.description,
+          date: d.date,
+          link: d.link,
+          isDone: d.isDone,
+        };
+      }),
       questions: req.topic.questions.map((q) => {
         return {
-          ...q,
+          id: q.id,
+          text: q.text,
+          creationDate: q.creationDate,
+          isPrivate: q.isPrivate,
           owner: {
             id: q.owner.id,
             email: q.owner.email,
@@ -23,7 +34,9 @@ module.exports = function () {
           },
           replies: q.replies.map((r) => {
             return {
-              ...r,
+              id: r.id,
+              creationDate: r.creationDate,
+              text: r.text,
               owner: {
                 id: r.owner.id,
                 email: r.owner.email,
