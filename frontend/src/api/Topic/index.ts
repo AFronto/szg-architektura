@@ -12,6 +12,8 @@ import {
   addTopic,
 } from "../../store/Topic";
 import { push } from "connected-react-router";
+import QuestionData from "../../data/server/Topic/QuestionData";
+import ReplyData from "../../data/server/Topic/ReplyData";
 
 export function getTopics() {
   return (dispatch: AppDispatch, getState: () => ReduxState) => {
@@ -67,8 +69,11 @@ export function createNewTopic(topicData: TopicData) {
           dispatch(
             updateTopic({
               topicId: topicData.id,
-              owner: topicData.owner,
-              updatedTopic: { ...topicData, id: success.data.id },
+              updatedTopic: {
+                ...topicData,
+                owner: success.data.owner,
+                id: success.data.id,
+              },
             })
           );
         }
@@ -143,8 +148,82 @@ export function getSingleTopic(id: string) {
 
     return axios({
       method: "GET",
-      url: serverBaseUrl + "topics/" + id,
+      url: serverBaseUrl + "topics",
       headers: header,
+    }).then(
+      (success_getAll) => {
+        if (
+          success_getAll.data.logedOut !== undefined &&
+          success_getAll.data.logedOut === true
+        ) {
+          logOutLocally(dispatch);
+        } else {
+          dispatch(loadTopics({ topicList: success_getAll.data }));
+          axios({
+            method: "GET",
+            url: serverBaseUrl + "topics/" + id,
+            headers: header,
+          }).then(
+            (success) => {
+              if (
+                success.data.logedOut !== undefined &&
+                success.data.logedOut === true
+              ) {
+                logOutLocally(dispatch);
+              } else {
+                dispatch(
+                  updateTopic({
+                    topicId: id,
+                    updatedTopic: success.data,
+                  })
+                );
+              }
+            },
+            (error) => {}
+          );
+        }
+      },
+      (error) => {
+        dispatch(
+          addError({
+            name: "getAllTopicsError",
+            description: error.response.data,
+          })
+        );
+        if (error.response.status === 401) {
+          logOutLocally(dispatch);
+        }
+      }
+    );
+  };
+}
+
+export function createNewQuestion(topicId: string, question: QuestionData) {
+  return (dispatch: AppDispatch, getState: () => ReduxState) => {
+    const header = generateAuthenticationHeader(getState());
+
+    return axios({
+      method: "POST",
+      url: `${serverBaseUrl}topics/${topicId}/question`,
+      headers: header,
+      data: question,
+    }).then();
+  };
+}
+
+export function createNewReply(
+  topicId: string,
+  questionId: string,
+  reply: ReplyData
+) {
+  return (dispatch: AppDispatch, getState: () => ReduxState) => {
+    const header = generateAuthenticationHeader(getState());
+
+    return axios({
+      method: "POST",
+      url: `${serverBaseUrl}topics/${topicId}/question/${questionId}/reply`,
+      headers: header,
+      data: reply,
     }).then();
   };
 }

@@ -15,6 +15,7 @@ const sendBackActualUserMW = require("../middleware/logic/auth/sendBackActualUse
 const validatePasswordMW = require("../middleware/logic/auth/validatePasswordMW");
 const logIncomingCallMW = require("../middleware/logic/log/logIncomingCallMW");
 const sendJsonMW = require("../middleware/logic/sendJsonMW");
+const sendSingleTopicDataMW = require("../middleware/logic/topic/sendSingleTopicDataMW");
 const objRepo = require("../models/objecRepository");
 
 module.exports = function (app) {
@@ -103,6 +104,16 @@ module.exports = function (app) {
     getUserMW(objRepo),
     getSingleTopicMW(objRepo),
     deleteTopicMW(objRepo),
+    sendJsonMW()
+  );
+
+  app.get(
+    "/topics/:id",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getSingleTopicMW(objRepo),
+    sendSingleTopicDataMW(),
     sendJsonMW()
   );
 };

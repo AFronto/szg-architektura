@@ -105,14 +105,7 @@ export const DetailedTopicScreen: FunctionComponent = () => {
 
   useEffect(() => {
     dispatch(initializeScreen());
-    dispatch(getTopics());
     dispatch(getSingleTopic(id));
-    dispatch(
-      updateTopic({
-        topicId: id,
-        updatedTopic: { ...topic, questions: questions },
-      })
-    );
   }, []);
 
   const schema = yup.object({

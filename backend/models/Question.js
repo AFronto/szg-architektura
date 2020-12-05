@@ -6,6 +6,7 @@ const Question = db.model("Question", {
   owner: { type: Schema.Types.ObjectId, ref: "User" },
   replies: [{ type: Schema.Types.ObjectId, ref: "Reply" }],
   creationDate: Date,
+  isPrivate: Boolean,
 });
 
 module.exports = Question;
