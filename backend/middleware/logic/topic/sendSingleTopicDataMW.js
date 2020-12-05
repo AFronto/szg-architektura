@@ -20,7 +20,7 @@ module.exports = function () {
             userName: q.owner.userName,
             isTeacher: q.owner.isTeacher,
           },
-          replies: map((r) => {
+          replies: q.replies.map((r) => {
             return {
               ...r,
               owner: {
