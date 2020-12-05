@@ -1,8 +1,9 @@
-import React, { FunctionComponent } from "react";
-import { Col, Row } from "react-bootstrap";
+import React, { FunctionComponent, useCallback, useState } from "react";
+import { Button, Col, Row } from "react-bootstrap";
 import * as yup from "yup";
 import DeadlineData from "../../../../data/server/Topic/DeadlineData";
 import { DeadlineCard } from "./DeadlineCard";
+import { DeadlineModal } from "./DeadlineModal";
 
 export const DeadlineList: FunctionComponent<{
   deadlines: DeadlineData[];
@@ -11,27 +12,10 @@ export const DeadlineList: FunctionComponent<{
     name: yup.string().required(),
   });
 
-  //   const dispatch = useDispatch();
+  const [show, setShow] = useState(false);
 
-  //   const { handleSubmit, errors } = useForm({
-  //     validationSchema: schema,
-  //   });
-
-  //   const onSubmit = handleSubmit((data) => {
-  //     const replyToSend = {
-  //       id: data.id,
-  //       owner: data.owner,
-  //       text: data.questions,
-  //     };
-
-  //     dispatch(
-  //       addReply({
-  //         newReply: replyToSend,
-  //       })
-  //     );
-  //     //dispatch(createNewReply(replyToSend));
-  //   });
-
+  const handleClose = useCallback(() => setShow(false), [setShow]);
+  const handleShow = () => setShow(true);
   return (
     <>
       <Row>
@@ -41,19 +25,19 @@ export const DeadlineList: FunctionComponent<{
           </Col>
         ))}
       </Row>
-      {/* <Row>
+      <Row>
         <Col md={12} style={{ marginTop: 40 }}>
-          <Form noValidate onSubmit={onSubmit}>
-            <Form.Group controlId="formQuestion">
-              <Form.Control placeholder="Enter your question" />
-            </Form.Group>
-
-            <Button variant="secondary" type="submit">
-              Post your question!
-            </Button>
-          </Form>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              handleShow();
+            }}
+          >
+            Post your question!
+          </Button>
         </Col>
-      </Row> */}
+      </Row>
+      <DeadlineModal model={{ show, handleClose }} isNew={true} />
     </>
   );
 };

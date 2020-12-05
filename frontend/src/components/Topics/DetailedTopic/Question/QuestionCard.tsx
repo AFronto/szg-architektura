@@ -3,36 +3,42 @@ import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
+import { createNewReply } from "../../../../api/Topic";
 import QuestionData from "../../../../data/server/Topic/QuestionData";
+import UserData from "../../../../data/server/User/UserData";
 import { addReply } from "../../../../store/Topic";
 import { Reply } from "./ReplyCard";
 
-export const QuestionCard: FunctionComponent<{ question: QuestionData }> = (
-  props
-) => {
+export const QuestionCard: FunctionComponent<{
+  topicId: string;
+  question: QuestionData;
+}> = (props) => {
   const schema = yup.object({
-    name: yup.string().required(),
+    text: yup.string().required(),
   });
 
   const dispatch = useDispatch();
 
-  const { handleSubmit, errors } = useForm({
+  const { register, handleSubmit, errors } = useForm({
     validationSchema: schema,
   });
 
   const onSubmit = handleSubmit((data) => {
     const replyToSend = {
-      id: data.id,
-      owner: data.owner,
-      text: data.questions,
+      id: "fake_id",
+      owner: {} as UserData,
+      text: data.text,
+      creationDate: new Date(Date.now()),
     };
 
     dispatch(
       addReply({
+        parentTopicId: props.topicId,
+        parentQuestionId: props.question.id,
         newReply: replyToSend,
       })
     );
-    //dispatch(createNewReply(replyToSend));
+    dispatch(createNewReply(props.topicId, props.question.id, replyToSend));
   });
 
   return (
@@ -57,7 +63,12 @@ export const QuestionCard: FunctionComponent<{ question: QuestionData }> = (
       <Col md={{ span: 10, offset: 1 }}>
         <Form noValidate onSubmit={onSubmit}>
           <Form.Group controlId="formReply">
-            <Form.Control placeholder="Enter your reply" />
+            <Form.Control
+              placeholder="Enter your reply"
+              name="text"
+              type="text"
+              ref={register}
+            />
           </Form.Group>
 
           <Button variant="secondary" type="submit">

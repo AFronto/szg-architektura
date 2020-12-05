@@ -37,9 +37,9 @@ export const WrapperCard: FunctionComponent<{
       </Card.Header>
       {show && (
         <Card.Body>
-          {data.questions !== undefined && (
+          {data.questionList !== undefined && (
             <Col xs={12}>
-              <QuestionList questions={data.questions} />
+              <QuestionList questionList={data.questionList} />
             </Col>
           )}
           {data.description !== undefined && (

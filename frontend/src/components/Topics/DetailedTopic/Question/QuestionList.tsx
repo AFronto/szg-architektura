@@ -4,44 +4,54 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
-import QuestionData from "../../../../data/server/Topic/QuestionData";
-import { addReply } from "../../../../store/Topic";
+import { createNewQuestion } from "../../../../api/Topic";
+import QuestionListData from "../../../../data/client/Question/QuestionListData";
+import UserData from "../../../../data/server/User/UserData";
+import { addQuestion } from "../../../../store/Topic";
 import { QuestionCard } from "./QuestionCard";
 
 export const QuestionList: FunctionComponent<{
-  questions: QuestionData[];
+  questionList: QuestionListData;
 }> = (props) => {
+  const { questionList } = props;
+
   const schema = yup.object({
-    name: yup.string().required(),
+    text: yup.string().required(),
   });
 
   const dispatch = useDispatch();
 
-  const { handleSubmit, errors } = useForm({
+  const { register, handleSubmit, errors } = useForm({
     validationSchema: schema,
   });
 
   const onSubmit = handleSubmit((data) => {
-    const replyToSend = {
-      id: data.id,
-      owner: data.owner,
-      text: data.questions,
+    console.log("rs");
+    const questionToSend = {
+      id: "fake_id",
+      owner: {} as UserData,
+      text: data.text,
+      replies: [],
+      creationDate: new Date(Date.now()),
+      isPrivate: questionList.isPrivate,
     };
+    console.log("r");
 
     dispatch(
-      addReply({
-        newReply: replyToSend,
+      addQuestion({
+        parentTopicId: questionList.topicId,
+        newQuestion: questionToSend,
       })
     );
-    //dispatch(createNewReply(replyToSend));
+    dispatch(createNewQuestion(questionList.topicId, questionToSend));
   });
 
   return (
     <>
       <Row>
-        {props.questions.map((question) => (
+        {questionList.questions.map((question) => (
           <Col xs={12}>
-            <QuestionCard question={question} />
+            <QuestionCard topicId={questionList.topicId} question={question} />
           </Col>
         ))}
       </Row>
@@ -49,7 +59,22 @@ export const QuestionList: FunctionComponent<{
         <Col md={12} style={{ marginTop: 40 }}>
           <Form noValidate onSubmit={onSubmit}>
             <Form.Group controlId="formQuestion">
-              <Form.Control placeholder="Enter your question" />
+              <Form.Control
+                placeholder="Enter your question"
+                name="text"
+                type="text"
+                ref={register}
+                isInvalid={!!errors.text}
+              />
+              <Form.Control.Feedback type="invalid">
+                <h6>
+                  {errors.text
+                    ? Array.isArray(errors.text)
+                      ? errors.text[0].message
+                      : errors.text.message
+                    : ""}
+                </h6>
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Button variant="secondary" type="submit">

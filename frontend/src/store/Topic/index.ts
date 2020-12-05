@@ -33,6 +33,8 @@ const topicsSlice = createSlice({
 
     //Question Actions
     addQuestion(state, action) {
+      console.log(action.payload.parentTopicId);
+      console.log("hello");
       var topicIndex = state.findIndex(
         (t) => t.id === action.payload.parentTopicId
       );

@@ -1,10 +1,10 @@
 import DeadlineData from "../../server/Topic/DeadlineData";
-import QuestionData from "../../server/Topic/QuestionData";
+import QuestionListData from "../Question/QuestionListData";
 
 export default interface WrapperData {
   header: string;
   show: boolean;
   description?: string;
-  questions?: QuestionData[];
+  questionList?: QuestionListData;
   deadlines?: DeadlineData[];
 }

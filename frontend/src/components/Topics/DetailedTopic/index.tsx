@@ -144,16 +144,14 @@ export const DetailedTopicScreen: FunctionComponent = () => {
     <>
       {topic !== undefined ? (
         <>
-          <Row style={{ marginBottom: 20 }}>
-            <div className="d-flex justify-content-between">
-              <h1>{topic.name}</h1>
-              {user.isTeacher && user.id === topic.owner.id && (
-                <Button size="lg" variant="danger" onClick={deleteTopicPressed}>
-                  Delete
-                </Button>
-              )}
-            </div>
-          </Row>
+          <div className="d-flex justify-content-between">
+            <h1>{topic.name}</h1>
+            {user.isTeacher && user.id === topic.owner.id && (
+              <Button size="lg" variant="danger" onClick={deleteTopicPressed}>
+                Delete
+              </Button>
+            )}
+          </div>
           <Row>
             <Col xs={12}>
               <WrapperCard
@@ -171,7 +169,11 @@ export const DetailedTopicScreen: FunctionComponent = () => {
                 data={{
                   header: "Public Questions",
                   show: true,
-                  questions: topic.questions,
+                  questionList: {
+                    topicId: topic.id,
+                    isPrivate: false,
+                    questions: topic.questions,
+                  },
                 }}
               />
             </Col>
@@ -182,7 +184,11 @@ export const DetailedTopicScreen: FunctionComponent = () => {
                 data={{
                   header: "Private Questions",
                   show: false,
-                  questions: topic.questions,
+                  questionList: {
+                    topicId: topic.id,
+                    isPrivate: true,
+                    questions: topic.questions,
+                  },
                 }}
               />
             </Col>
