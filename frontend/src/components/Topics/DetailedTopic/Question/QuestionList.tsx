@@ -11,6 +11,7 @@ import { addQuestion } from "../../../../store/Topic";
 import { QuestionCard } from "./QuestionCard";
 
 export const QuestionList: FunctionComponent<{
+  parentTopicId: string;
   questionList: QuestionListData;
 }> = (props) => {
   const { questionList } = props;
@@ -26,7 +27,6 @@ export const QuestionList: FunctionComponent<{
   });
 
   const onSubmit = handleSubmit((data) => {
-    console.log("rs");
     const questionToSend = {
       id: "fake_id",
       owner: {} as UserData,
@@ -35,15 +35,14 @@ export const QuestionList: FunctionComponent<{
       creationDate: {} as Date,
       isPrivate: questionList.isPrivate,
     };
-    console.log("r");
 
     dispatch(
       addQuestion({
-        parentTopicId: questionList.topicId,
+        parentTopicId: props.parentTopicId,
         newQuestion: questionToSend,
       })
     );
-    dispatch(createNewQuestion(questionList.topicId, questionToSend));
+    dispatch(createNewQuestion(props.parentTopicId, questionToSend));
   });
 
   return (
@@ -51,7 +50,7 @@ export const QuestionList: FunctionComponent<{
       <Row>
         {questionList.questions.map((question) => (
           <Col xs={12}>
-            <QuestionCard topicId={questionList.topicId} question={question} />
+            <QuestionCard topicId={props.parentTopicId} question={question} />
           </Col>
         ))}
       </Row>

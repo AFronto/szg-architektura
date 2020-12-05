@@ -1,4 +1,5 @@
 import UserData from "../User/UserData";
+import DeadlineData from "./DeadlineData";
 import QuestionData from "./QuestionData";
 
 export default interface TopicData {
@@ -7,4 +8,5 @@ export default interface TopicData {
   description: string;
   owner: UserData;
   questions: QuestionData[];
+  deadlines: DeadlineData[];
 }

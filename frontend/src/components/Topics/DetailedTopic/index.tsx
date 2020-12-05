@@ -24,61 +24,6 @@ export const DetailedTopicScreen: FunctionComponent = () => {
     (t) => t.id === id
   );
 
-  const questions = [
-    {
-      id: "1",
-      owner: { id: "xyz", email: "xyz", userName: "Bela", isTeacher: false },
-      text: "mi ez?",
-      replies: [
-        {
-          id: "10",
-          owner: { id: "xy", email: "xy", userName: "Anna", isTeacher: false },
-          text: "alma",
-        },
-        {
-          id: "11",
-          owner: {
-            id: "xyz",
-            email: "xyz",
-            userName: "Bela",
-            isTeacher: false,
-          },
-          text: "almaspite",
-        },
-      ],
-      isPrivate: false,
-    },
-    {
-      id: "2",
-      owner: { id: "xyz", email: "xyz", userName: "Bela", isTeacher: false },
-      text: "Van süti?",
-      replies: [
-        {
-          id: "20",
-          owner: { id: "x", email: "x", userName: "Laci", isTeacher: true },
-          text: "nincs :(",
-        },
-        {
-          id: "21",
-          owner: {
-            id: "xyz",
-            email: "xyz",
-            userName: "Bela",
-            isTeacher: false,
-          },
-          text: "sad",
-        },
-      ],
-      isPrivate: false,
-    },
-    {
-      id: "3",
-      owner: { id: "xyzw", email: "xyzw", userName: "Éva", isTeacher: false },
-      text: "hello?",
-      replies: [],
-      isPrivate: false,
-    },
-  ];
   const deadlines = [
     {
       id: "1",
@@ -159,6 +104,7 @@ export const DetailedTopicScreen: FunctionComponent = () => {
                   header: "Topic Description",
                   show: true,
                   description: topic.description,
+                  parentTopicId: topic.id,
                 }}
               />
             </Col>
@@ -169,8 +115,8 @@ export const DetailedTopicScreen: FunctionComponent = () => {
                 data={{
                   header: "Public Questions",
                   show: true,
+                  parentTopicId: topic.id,
                   questionList: {
-                    topicId: topic.id,
                     isPrivate: false,
                     questions: topic.questions,
                   },
@@ -184,8 +130,8 @@ export const DetailedTopicScreen: FunctionComponent = () => {
                 data={{
                   header: "Private Questions",
                   show: false,
+                  parentTopicId: topic.id,
                   questionList: {
-                    topicId: topic.id,
                     isPrivate: true,
                     questions: topic.questions,
                   },
@@ -199,6 +145,7 @@ export const DetailedTopicScreen: FunctionComponent = () => {
                 data={{
                   header: "Deadlines",
                   show: false,
+                  parentTopicId: topic.id,
                   deadlines: deadlines,
                 }}
               />

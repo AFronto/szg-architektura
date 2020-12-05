@@ -6,17 +6,20 @@ import { useDispatch } from "react-redux";
 import * as yup from "yup";
 import ModalModel from "../../../../data/ModalModel";
 import DeadlineData from "../../../../data/server/Topic/DeadlineData";
+import { addDeadline, updateDeadline } from "../../../../store/Topic";
 
 export const DeadlineModal: FunctionComponent<{
   model: ModalModel;
   isNew: boolean;
+  parentTopicId: string;
   deadline?: DeadlineData;
 }> = (props) => {
   const { show, handleClose } = props.model;
   const dispatch = useDispatch();
 
   const schema = yup.object({
-    name: yup.string().required(),
+    description: yup.string().required(),
+    date: yup.string().required(),
   });
 
   const { register, handleSubmit, errors } = useForm({
@@ -26,28 +29,27 @@ export const DeadlineModal: FunctionComponent<{
   const onSubmit = handleSubmit((data) => {
     const deadlineToSend = {
       id: props.deadline ? props.deadline.id : "fake_id",
-      date: props.deadline ? props.deadline.date : new Date(Date.now()),
+      date: new Date(data.date),
       description: data.description,
       link: props.deadline ? props.deadline.link : "",
       isDone: props.deadline ? props.deadline.isDone : false,
     };
 
-    // if (props.isNew) {
-    //   dispatch(
-    //     addTopic({
-    //       newTopic: topicToSend,
-    //     })
-    //   );
-    //   dispatch(createNewTopic(topicToSend));
-    // } else {
-    //   dispatch(editTopic(topicToSend));
-    //   dispatch(
-    //     updateTopic({
-    //       topicId: props.topic!.id,
-    //       updatedTopicId: topicToSend,
-    //     })
-    //   );
-    // }
+    if (props.isNew) {
+      dispatch(
+        addDeadline({
+          parentTopicId: props.parentTopicId,
+          newDeadline: deadlineToSend,
+        })
+      );
+    } else {
+      dispatch(
+        updateDeadline({
+          parentTopicId: props.parentTopicId,
+          updatedDeadline: deadlineToSend,
+        })
+      );
+    }
     handleClose();
   });
 
@@ -85,15 +87,15 @@ export const DeadlineModal: FunctionComponent<{
               type="text"
               defaultValue={props.deadline ? props.deadline.description : ""}
               ref={register}
-              isInvalid={!!errors.name}
+              isInvalid={!!errors.description}
               placeholder="Describe the task"
             />
             <Form.Control.Feedback type="invalid">
               <h6>
-                {errors.name
-                  ? Array.isArray(errors.name)
-                    ? errors.name[0].message
-                    : errors.name.message
+                {errors.description
+                  ? Array.isArray(errors.description)
+                    ? errors.description[0].message
+                    : errors.description.message
                   : ""}
               </h6>
             </Form.Control.Feedback>
@@ -110,7 +112,6 @@ export const DeadlineModal: FunctionComponent<{
                   : new Date(Date.now()).toDateString()
               }
               ref={register}
-              isInvalid={!!errors.name}
             />
           </Form.Group>
 

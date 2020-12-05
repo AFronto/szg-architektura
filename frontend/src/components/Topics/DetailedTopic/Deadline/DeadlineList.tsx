@@ -6,6 +6,7 @@ import { DeadlineCard } from "./DeadlineCard";
 import { DeadlineModal } from "./DeadlineModal";
 
 export const DeadlineList: FunctionComponent<{
+  parentTopicId: string;
   deadlines: DeadlineData[];
 }> = (props) => {
   const schema = yup.object({
@@ -21,7 +22,10 @@ export const DeadlineList: FunctionComponent<{
       <Row>
         {props.deadlines.map((deadline) => (
           <Col xs={12}>
-            <DeadlineCard deadline={deadline} />
+            <DeadlineCard
+              parentTopicId={props.parentTopicId}
+              deadline={deadline}
+            />
           </Col>
         ))}
       </Row>
@@ -33,11 +37,15 @@ export const DeadlineList: FunctionComponent<{
               handleShow();
             }}
           >
-            Post your question!
+            Add a new deadline
           </Button>
         </Col>
       </Row>
-      <DeadlineModal model={{ show, handleClose }} isNew={true} />
+      <DeadlineModal
+        model={{ show, handleClose }}
+        isNew={true}
+        parentTopicId={props.parentTopicId}
+      />
     </>
   );
 };

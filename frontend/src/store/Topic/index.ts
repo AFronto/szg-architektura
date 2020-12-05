@@ -33,8 +33,6 @@ const topicsSlice = createSlice({
 
     //Question Actions
     addQuestion(state, action) {
-      console.log(action.payload.parentTopicId);
-      console.log("hello");
       var topicIndex = state.findIndex(
         (t) => t.id === action.payload.parentTopicId
       );
@@ -114,6 +112,40 @@ const topicsSlice = createSlice({
       }
       return state;
     },
+
+    //Deadline Actions
+    addDeadline(state, action) {
+      var topicIndex = state.findIndex(
+        (t) => t.id === action.payload.parentTopicId
+      );
+      state[topicIndex].deadlines.push(action.payload.newDeadline);
+      return state;
+    },
+    updateDeadline(state, action) {
+      var topicIndex = state.findIndex(
+        (t) => t.id === action.payload.parentTopicId
+      );
+      var deadlineToUpdateIndex = state[topicIndex].deadlines.findIndex(
+        (deadline) => deadline.id === action.payload.deadlineId
+      );
+      if (deadlineToUpdateIndex !== -1) {
+        state[topicIndex].deadlines[deadlineToUpdateIndex] =
+          action.payload.updatedDeadline;
+      }
+      return state;
+    },
+    removeDeadline(state, action) {
+      var topicIndex = state.findIndex(
+        (t) => t.id === action.payload.parentTopicId
+      );
+      var deadlineToDeleteIndex = state[topicIndex].deadlines.findIndex(
+        (deadline) => deadline.id === action.payload.deadlineId
+      );
+      if (deadlineToDeleteIndex !== -1) {
+        state[topicIndex].deadlines.splice(deadlineToDeleteIndex, 1);
+      }
+      return state;
+    },
   },
 });
 
@@ -132,6 +164,11 @@ export const {
   addReply,
   updateReply,
   removeReply,
+
+  //Deadline Actions
+  addDeadline,
+  updateDeadline,
+  removeDeadline,
 } = topicsSlice.actions;
 
 export default topicsSlice.reducer;

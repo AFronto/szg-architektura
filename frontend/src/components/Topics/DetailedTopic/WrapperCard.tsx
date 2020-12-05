@@ -39,7 +39,10 @@ export const WrapperCard: FunctionComponent<{
         <Card.Body>
           {data.questionList !== undefined && (
             <Col xs={12}>
-              <QuestionList questionList={data.questionList} />
+              <QuestionList
+                parentTopicId={data.parentTopicId}
+                questionList={data.questionList}
+              />
             </Col>
           )}
           {data.description !== undefined && (
@@ -47,7 +50,10 @@ export const WrapperCard: FunctionComponent<{
           )}
           {data.deadlines !== undefined && (
             <Col xs={12}>
-              <DeadlineList deadlines={data.deadlines} />
+              <DeadlineList
+                parentTopicId={data.parentTopicId}
+                deadlines={data.deadlines}
+              />
             </Col>
           )}
         </Card.Body>

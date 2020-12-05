@@ -4,10 +4,12 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
 import DeadlineData from "../../../../data/server/Topic/DeadlineData";
+import { updateDeadline } from "../../../../store/Topic";
 
-export const DeadlineCard: FunctionComponent<{ deadline: DeadlineData }> = (
-  props
-) => {
+export const DeadlineCard: FunctionComponent<{
+  parentTopicId: string;
+  deadline: DeadlineData;
+}> = (props) => {
   const { deadline } = props;
 
   const schema = yup.object({
@@ -21,11 +23,12 @@ export const DeadlineCard: FunctionComponent<{ deadline: DeadlineData }> = (
   });
 
   const onSubmitLink = handleSubmit((data) => {
-    // dispatch(
-    //   addLinkToDeadline({
-    //     link: data.link,
-    //   })
-    // );
+    dispatch(
+      updateDeadline({
+        parentTopicId: props.parentTopicId,
+        newDeadline: {},
+      })
+    );
   });
 
   const switchStatus = () => {
@@ -69,6 +72,7 @@ export const DeadlineCard: FunctionComponent<{ deadline: DeadlineData }> = (
                 <Button variant="secondary" onClick={switchStatus}>
                   {deadline.isDone ? "Reopen" : "Finish"}
                 </Button>
+                <Button variant="secondary">Edit deadline</Button>
               </div>
             </Form>
           </Col>

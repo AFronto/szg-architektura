@@ -8,6 +8,8 @@ import { addTopic, updateTopic } from "../../store/Topic";
 import { createNewTopic, editTopic } from "../../api/Topic";
 import ModalModel from "../../data/ModalModel";
 import UserData from "../../data/server/User/UserData";
+import DeadlineData from "../../data/server/Topic/DeadlineData";
+import QuestionData from "../../data/server/Topic/QuestionData";
 
 export const TopicModal: FunctionComponent<{
   model: ModalModel;
@@ -31,7 +33,8 @@ export const TopicModal: FunctionComponent<{
       name: data.name,
       description: data.description,
       owner: props.topic ? props.topic.owner : ({} as UserData),
-      questions: props.topic ? props.topic.questions : [],
+      questions: props.topic ? props.topic.questions : ([] as QuestionData[]),
+      deadlines: props.topic ? props.topic.deadlines : ([] as DeadlineData[]),
     };
 
     if (props.isNew) {
