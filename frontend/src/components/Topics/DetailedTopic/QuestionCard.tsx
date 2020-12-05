@@ -42,7 +42,9 @@ export const QuestionCard: FunctionComponent<{ question: QuestionData }> = (
         className="mx-auto"
         border="primary"
       >
-        <Card.Header>{props.question.owner.userName}</Card.Header>
+        <Card.Header style={{ background: "#7E0000", color: "white" }}>
+          {props.question.owner.userName}
+        </Card.Header>
         <Card.Body>{props.question.text}</Card.Body>
       </Card>
       <Row>
@@ -58,7 +60,7 @@ export const QuestionCard: FunctionComponent<{ question: QuestionData }> = (
             <Form.Control placeholder="Enter your reply" />
           </Form.Group>
 
-          <Button variant="primary" type="submit">
+          <Button variant="secondary" type="submit">
             Reply
           </Button>
         </Form>

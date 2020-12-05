@@ -1,6 +1,11 @@
 import { push } from "connected-react-router";
-import React, { FunctionComponent, useEffect } from "react";
-import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
+import React, {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import { Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -10,7 +15,7 @@ import { deleteTopic, getSingleTopic, getTopics } from "../../../api/Topic";
 import { ReduxState } from "../../../store";
 import { removeTopic } from "../../../store/Topic";
 import { addQuestion } from "../../../store/Topic/QuestionSlice";
-import { QuestionList } from "./QuestionList";
+import { WrapperCard } from "./WrapperCard";
 
 export const DetailedTopicScreen: FunctionComponent = () => {
   const dispatch = useDispatch();
@@ -112,23 +117,86 @@ export const DetailedTopicScreen: FunctionComponent = () => {
     },
   ];
 
+  const deadlines = [
+    {
+      id: "1",
+      description: "login screen",
+      date: new Date("2020-11-30"),
+      link: "link",
+      isDone: true,
+    },
+    {
+      id: "2",
+      description: "logout screen",
+      date: new Date("2020-12-01"),
+      link: "link",
+      isDone: false,
+    },
+    {
+      id: "3",
+      description: "backend",
+      date: new Date("2020-12-30"),
+      link: "link",
+      isDone: false,
+    },
+  ];
+
   return (
     <>
       {topic !== undefined ? (
         <>
-          <div className="d-flex justify-content-between">
-            <h1>{topic.name}</h1>
-            {user.isTeacher && user.id === topic.owner.id && (
-              <Button size="lg" variant="danger" onClick={deleteTopicPressed}>
-                Delete
-              </Button>
-            )}
-          </div>
-          <h1>topic.description</h1>
-          <h1>questions</h1>
+          <Row style={{ marginBottom: 20 }}>
+            <div className="d-flex justify-content-between">
+              <h1>{topic.name}</h1>
+              {user.isTeacher && user.id === topic.owner.id && (
+                <Button size="lg" variant="danger" onClick={deleteTopicPressed}>
+                  Delete
+                </Button>
+              )}
+            </div>
+          </Row>
           <Row>
             <Col xs={12}>
-              <QuestionList questions={questions} />
+              <WrapperCard
+                data={{
+                  header: "Topic Description",
+                  show: true,
+                  description: topic.description,
+                }}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <WrapperCard
+                data={{
+                  header: "Public Questions",
+                  show: true,
+                  questions: questions,
+                }}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <WrapperCard
+                data={{
+                  header: "Private Questions",
+                  show: false,
+                  questions: questions,
+                }}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <WrapperCard
+                data={{
+                  header: "Deadlines",
+                  show: false,
+                  deadlines: deadlines,
+                }}
+              />
             </Col>
           </Row>
         </>

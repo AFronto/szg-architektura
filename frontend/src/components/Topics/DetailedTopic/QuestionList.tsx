@@ -52,7 +52,7 @@ export const QuestionList: FunctionComponent<{
               <Form.Control placeholder="Enter your question" />
             </Form.Group>
 
-            <Button variant="primary" type="submit">
+            <Button variant="secondary" type="submit">
               Post your question!
             </Button>
           </Form>
