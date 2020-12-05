@@ -66,12 +66,7 @@ export const DeadlineCard: FunctionComponent<{ deadline: DeadlineData }> = (
                 <Button variant="secondary" type="submit">
                   Add Link
                 </Button>
-                <Button
-                  variant="success"
-                  onClick={() => {
-                    switchStatus;
-                  }}
-                >
+                <Button variant="success" onClick={switchStatus}>
                   {deadline.isDone ? "Reopen" : "Finish"}
                 </Button>
               </div>
