@@ -1,3 +1,6 @@
+const createConsultationMW = require("../middleware/data/cosnsultation/createConsultationMW");
+const deleteConsultationMW = require("../middleware/data/cosnsultation/deleteConsultationMW");
+const updateConsultationMW = require("../middleware/data/cosnsultation/updateConsultationMW");
 const createDeadlineMW = require("../middleware/data/deadline/createDeadlineMW");
 const updateDeadlineMW = require("../middleware/data/deadline/updateDeadlineMW");
 const createQuestionMW = require("../middleware/data/question/createQuestionMW");
@@ -22,7 +25,6 @@ const logIncomingCallMW = require("../middleware/logic/log/logIncomingCallMW");
 const sendJsonMW = require("../middleware/logic/sendJsonMW");
 const sendSingleTopicDataMW = require("../middleware/logic/topic/sendSingleTopicDataMW");
 const objRepo = require("../models/objecRepository");
-const { update } = require("../models/User");
 
 module.exports = function (app) {
   //Authentication
@@ -165,6 +167,35 @@ module.exports = function (app) {
     authenticateWithJWTMW(),
     getUserMW(objRepo),
     updateDeadlineMW(objRepo),
+    sendJsonMW()
+  );
+
+  app.post(
+    "/topics/:topicId/consultation",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    createConsultationMW(objRepo),
+    sendJsonMW()
+  );
+
+  app.put(
+    "/topics/:topicId/consultation/:consultationId",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getSingleTopicMW(objRepo),
+    updateConsultationMW(objRepo),
+    sendJsonMW()
+  );
+
+  app.delete(
+    "/topics/:topicId/consultation/:consultationId",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getSingleTopicMW(objRepo),
+    deleteConsultationMW(objRepo),
     sendJsonMW()
   );
 };

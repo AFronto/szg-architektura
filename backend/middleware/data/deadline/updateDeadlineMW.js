@@ -11,7 +11,7 @@ module.exports = function (objectrepository) {
         return res.status(400).send("Cannot update deadline!");
       }
       deadlines[0].description = req.body.description;
-      deadlines[0].date = req.body.date;
+      deadlines[0].date = new Date(req.body.date);
       deadlines[0].link = req.body.link;
       deadlines[0].isDone = req.body.isDone;
 

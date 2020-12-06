@@ -25,6 +25,7 @@ module.exports = function (objectrepository) {
             },
             questions: [],
             deadlines: [],
+            consultation: {},
           };
         });
         return next();

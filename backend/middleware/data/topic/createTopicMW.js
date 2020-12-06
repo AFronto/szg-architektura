@@ -11,6 +11,7 @@ module.exports = function (objectrepository) {
       owner: req.user,
       questions: [],
       deadlines: [],
+      consultation: {},
     });
 
     topic.save(function (err, successful_topic) {

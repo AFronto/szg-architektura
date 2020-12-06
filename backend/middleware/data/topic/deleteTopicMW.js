@@ -5,6 +5,7 @@ module.exports = function (objectrepository) {
   const Question = requireOption(objectrepository, "Question");
   const Reply = requireOption(objectrepository, "Reply");
   const Deadline = requireOption(objectrepository, "Deadline");
+  const Consultation = requireOption(objectrepository, "Consultation");
 
   return function (req, res, next) {
     console.log("Delete Topic");
@@ -19,6 +20,14 @@ module.exports = function (objectrepository) {
         }
       });
     });
+
+    if (req.topic.cosultation.id) {
+      Consultation.deleteOne({ _id: req.topic.consultation.id }).exec((err) => {
+        if (err !== null) {
+          console.log(`Deleting Consultation Error: ${err}`);
+        }
+      });
+    }
 
     req.topic.questions.forEach((q) => {
       q.replies.forEach((r) => {

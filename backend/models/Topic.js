@@ -7,6 +7,7 @@ const Topic = db.model("Topic", {
   owner: { type: Schema.Types.ObjectId, ref: "User" },
   questions: [{ type: Schema.Types.ObjectId, ref: "Question" }],
   deadlines: [{ type: Schema.Types.ObjectId, ref: "Deadline" }],
+  consultation: { type: Schema.Types.ObjectId, ref: "Consultation" },
 });
 
 module.exports = Topic;
