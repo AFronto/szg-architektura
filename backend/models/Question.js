@@ -7,6 +7,7 @@ const Question = db.model("Question", {
   replies: [{ type: Schema.Types.ObjectId, ref: "Reply" }],
   creationDate: Date,
   isPrivate: Boolean,
+  isClosed: Boolean,
 });
 
 module.exports = Question;

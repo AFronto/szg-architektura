@@ -1,5 +1,7 @@
 const createDeadlineMW = require("../middleware/data/deadline/createDeadlineMW");
+const updateDeadlineMW = require("../middleware/data/deadline/updateDeadlineMW");
 const createQuestionMW = require("../middleware/data/question/createQuestionMW");
+const updateQuestionMW = require("../middleware/data/question/updateQuestionMW");
 const createReplyMW = require("../middleware/data/reply/createReplyMW");
 const createTopicMW = require("../middleware/data/topic/createTopicMW");
 const deleteTopicMW = require("../middleware/data/topic/deleteTopicMW");
@@ -20,6 +22,7 @@ const logIncomingCallMW = require("../middleware/logic/log/logIncomingCallMW");
 const sendJsonMW = require("../middleware/logic/sendJsonMW");
 const sendSingleTopicDataMW = require("../middleware/logic/topic/sendSingleTopicDataMW");
 const objRepo = require("../models/objecRepository");
+const { update } = require("../models/User");
 
 module.exports = function (app) {
   //Authentication
@@ -125,7 +128,6 @@ module.exports = function (app) {
     logIncomingCallMW(),
     authenticateWithJWTMW(),
     getUserMW(objRepo),
-    getSingleTopicMW(objRepo),
     createQuestionMW(objRepo),
     sendJsonMW()
   );
@@ -135,7 +137,6 @@ module.exports = function (app) {
     logIncomingCallMW(),
     authenticateWithJWTMW(),
     getUserMW(objRepo),
-    getSingleTopicMW(objRepo),
     createReplyMW(objRepo),
     sendJsonMW()
   );
@@ -145,8 +146,25 @@ module.exports = function (app) {
     logIncomingCallMW(),
     authenticateWithJWTMW(),
     getUserMW(objRepo),
-    getSingleTopicMW(objRepo),
     createDeadlineMW(objRepo),
+    sendJsonMW()
+  );
+
+  app.put(
+    "/topics/:topicId/question",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    updateQuestionMW(objRepo),
+    sendJsonMW()
+  );
+
+  app.put(
+    "/topics/:topicId/deadline",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    updateDeadlineMW(objRepo),
     sendJsonMW()
   );
 };

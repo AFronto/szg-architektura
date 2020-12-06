@@ -13,6 +13,7 @@ module.exports = function (objectrepository) {
       replies: [],
       creationDate: Date.now(),
       isPrivate: req.body.isPrivate,
+      isClosed: false,
     });
 
     question.save(function (err, successful_question) {
@@ -37,6 +38,7 @@ module.exports = function (objectrepository) {
               userName: req.user.userName,
               isTeacher: req.user.isTeacher,
             },
+            creationDate: successful_question.creationDate.toString(),
           };
           return next();
         });

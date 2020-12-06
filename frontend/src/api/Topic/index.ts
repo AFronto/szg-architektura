@@ -254,6 +254,50 @@ export function createNewQuestion(topicId: string, question: QuestionData) {
   };
 }
 
+export function updateExistingQuestion(
+  topicId: string,
+  oldQuestion: QuestionData,
+  question: QuestionData
+) {
+  return (dispatch: AppDispatch, getState: () => ReduxState) => {
+    const header = generateAuthenticationHeader(getState());
+
+    return axios({
+      method: "PUT",
+      url: `${serverBaseUrl}topics/${topicId}/question`,
+      headers: header,
+      data: question,
+    }).then(
+      (success) => {
+        if (
+          success.data.logedOut !== undefined &&
+          success.data.logedOut === true
+        ) {
+          logOutLocally(dispatch);
+        }
+      },
+      (error) => {
+        dispatch(
+          updateQuestion({
+            parentTopicId: topicId,
+            questionId: question.id,
+            updatedQuestion: oldQuestion,
+          })
+        );
+        dispatch(
+          addError({
+            name: "updateQuestionError",
+            description: error.response.data,
+          })
+        );
+        if (error.response.status === 401) {
+          logOutLocally(dispatch);
+        }
+      }
+    );
+  };
+}
+
 export function createNewReply(
   topicId: string,
   questionId: string,
@@ -348,6 +392,50 @@ export function createNewDeadline(topicId: string, deadline: DeadlineData) {
         dispatch(
           addError({
             name: "createDeadlineError",
+            description: error.response.data,
+          })
+        );
+        if (error.response.status === 401) {
+          logOutLocally(dispatch);
+        }
+      }
+    );
+  };
+}
+
+export function updateExistingDeadline(
+  topicId: string,
+  oldDeadLine: DeadlineData,
+  deadline: DeadlineData
+) {
+  return (dispatch: AppDispatch, getState: () => ReduxState) => {
+    const header = generateAuthenticationHeader(getState());
+
+    return axios({
+      method: "PUT",
+      url: `${serverBaseUrl}topics/${topicId}/deadline`,
+      headers: header,
+      data: deadline,
+    }).then(
+      (success) => {
+        if (
+          success.data.logedOut !== undefined &&
+          success.data.logedOut === true
+        ) {
+          logOutLocally(dispatch);
+        }
+      },
+      (error) => {
+        dispatch(
+          updateDeadline({
+            parentTopicId: topicId,
+            deadlineId: deadline.id,
+            updatedDeadline: oldDeadLine,
+          })
+        );
+        dispatch(
+          addError({
+            name: "updateDeadlineError",
             description: error.response.data,
           })
         );

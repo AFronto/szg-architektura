@@ -26,6 +26,7 @@ module.exports = function () {
           text: q.text,
           creationDate: q.creationDate.toString(),
           isPrivate: q.isPrivate,
+          isClosed: q.isClosed,
           owner: {
             id: q.owner.id,
             email: q.owner.email,

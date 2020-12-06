@@ -8,6 +8,10 @@ import { DatePicker } from "react-rainbow-components";
 import ModalModel from "../../../../data/ModalModel";
 import DeadlineData from "../../../../data/server/Topic/DeadlineData";
 import { addDeadline, updateDeadline } from "../../../../store/Topic";
+import {
+  createNewDeadline,
+  updateExistingDeadline,
+} from "../../../../api/Topic";
 
 export const DeadlineModal: FunctionComponent<{
   model: ModalModel;
@@ -44,13 +48,18 @@ export const DeadlineModal: FunctionComponent<{
           newDeadline: deadlineToSend,
         })
       );
+      dispatch(createNewDeadline(props.parentTopicId, deadlineToSend));
     } else {
+      var oldDeadline = props.deadline!;
       dispatch(
         updateDeadline({
           parentTopicId: props.parentTopicId,
           deadlineId: props.deadline!.id,
           updatedDeadline: deadlineToSend,
         })
+      );
+      dispatch(
+        updateExistingDeadline(props.parentTopicId, oldDeadline, deadlineToSend)
       );
     }
     handleClose();

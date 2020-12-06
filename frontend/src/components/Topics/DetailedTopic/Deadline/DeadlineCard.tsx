@@ -3,6 +3,7 @@ import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
+import { updateExistingDeadline } from "../../../../api/Topic";
 import DeadlineData from "../../../../data/server/Topic/DeadlineData";
 import { updateDeadline } from "../../../../store/Topic";
 import { DeadlineModal } from "./DeadlineModal";
@@ -29,34 +30,38 @@ export const DeadlineCard: FunctionComponent<{
   const handleShow = () => setShow(true);
 
   const onSubmitLink = handleSubmit((data) => {
+    let oldDeadline = deadline;
+    let newDeadline = {
+      ...deadline,
+      link: data.link,
+    };
     dispatch(
       updateDeadline({
         parentTopicId: props.parentTopicId,
         deadlineId: deadline.id,
-        updatedDeadline: {
-          id: deadline.id,
-          description: deadline.description,
-          date: deadline.date,
-          link: data.link,
-          isDone: deadline.isDone,
-        },
+        updatedDeadline: newDeadline,
       })
+    );
+    dispatch(
+      updateExistingDeadline(props.parentTopicId, oldDeadline, newDeadline)
     );
   });
 
   const switchStatus = () => {
+    let oldDeadline = deadline;
+    let newDeadline = {
+      ...deadline,
+      isDone: !deadline.isDone,
+    };
     dispatch(
       updateDeadline({
         parentTopicId: props.parentTopicId,
         deadlineId: deadline.id,
-        updatedDeadline: {
-          id: deadline.id,
-          description: deadline.description,
-          date: deadline.date,
-          link: deadline.link,
-          isDone: deadline.isDone ? false : true,
-        },
+        updatedDeadline: newDeadline,
       })
+    );
+    dispatch(
+      updateExistingDeadline(props.parentTopicId, oldDeadline, newDeadline)
     );
   };
 

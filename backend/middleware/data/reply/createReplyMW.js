@@ -38,6 +38,7 @@ module.exports = function (objectrepository) {
               userName: req.user.userName,
               isTeacher: req.user.isTeacher,
             },
+            creationDate: successful_reply.creationDate.toString(),
           };
           return next();
         });

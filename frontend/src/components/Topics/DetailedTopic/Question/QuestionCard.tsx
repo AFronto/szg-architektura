@@ -3,7 +3,7 @@ import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
-import { createNewReply } from "../../../../api/Topic";
+import { createNewReply, updateExistingQuestion } from "../../../../api/Topic";
 import QuestionData from "../../../../data/server/Topic/QuestionData";
 import UserData from "../../../../data/server/User/UserData";
 import { addReply, updateQuestion } from "../../../../store/Topic";
@@ -42,16 +42,19 @@ export const QuestionCard: FunctionComponent<{
   });
 
   const handleStatusChange = () => {
+    let oldQuestion = props.question;
+    let newQuestion = {
+      ...props.question,
+      isClosed: !props.question.isClosed,
+    };
     dispatch(
       updateQuestion({
         parentTopicId: props.topicId,
         questionId: props.question.id,
-        updatedQuestion: {
-          ...props.question,
-          isClosed: !props.question.isClosed,
-        },
+        updatedQuestion: newQuestion,
       })
     );
+    dispatch(updateExistingQuestion(props.topicId, oldQuestion, newQuestion));
   };
 
   const styleClosed = { background: "MediumSeaGreen", color: "white" };
