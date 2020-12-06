@@ -8,6 +8,7 @@ export default interface TopicData {
   name: string;
   description: string;
   owner: UserData;
+  studentOnTopic: UserData[];
   questions: QuestionData[];
   deadlines: DeadlineData[];
   consultation: ConsultationData[];

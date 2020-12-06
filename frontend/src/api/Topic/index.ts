@@ -177,7 +177,17 @@ export function getSingleTopic(id: string) {
                 );
               }
             },
-            (error) => {}
+            (error) => {
+              dispatch(
+                addError({
+                  name: "getSingleTopicError",
+                  description: error.response.data,
+                })
+              );
+              if (error.response.status === 401) {
+                logOutLocally(dispatch);
+              }
+            }
           );
         }
       },
@@ -185,6 +195,40 @@ export function getSingleTopic(id: string) {
         dispatch(
           addError({
             name: "getAllTopicsError",
+            description: error.response.data,
+          })
+        );
+        if (error.response.status === 401) {
+          logOutLocally(dispatch);
+        }
+      }
+    );
+  };
+}
+
+export function setApplicationForTopic(id: string) {
+  return (dispatch: AppDispatch, getState: () => ReduxState) => {
+    const header = generateAuthenticationHeader(getState());
+
+    return axios({
+      method: "PUT",
+      url: serverBaseUrl + "topics/" + id + "/application",
+      headers: header,
+    }).then(
+      (success) => {
+        if (
+          success.data.logedOut !== undefined &&
+          success.data.logedOut === true
+        ) {
+          logOutLocally(dispatch);
+        } else {
+          dispatch(loadTopics({ topicList: success.data }));
+        }
+      },
+      (error) => {
+        dispatch(
+          addError({
+            name: "setApplicationForTopicError",
             description: error.response.data,
           })
         );

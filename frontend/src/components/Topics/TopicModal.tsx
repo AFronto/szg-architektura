@@ -34,6 +34,9 @@ export const TopicModal: FunctionComponent<{
       name: data.name,
       description: data.description,
       owner: props.topic ? props.topic.owner : ({} as UserData),
+      studentOnTopic: props.topic
+        ? props.topic.studentOnTopic
+        : ([] as UserData[]),
       questions: props.topic ? props.topic.questions : ([] as QuestionData[]),
       deadlines: props.topic ? props.topic.deadlines : ([] as DeadlineData[]),
       consultation: props.topic
@@ -49,7 +52,6 @@ export const TopicModal: FunctionComponent<{
       );
       dispatch(createNewTopic(topicToSend));
     } else {
-      dispatch(editTopic(topicToSend));
       dispatch(
         updateTopic({
           topicId: props.topic!.id,

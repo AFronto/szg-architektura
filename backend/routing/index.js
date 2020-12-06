@@ -10,6 +10,7 @@ const createTopicMW = require("../middleware/data/topic/createTopicMW");
 const deleteTopicMW = require("../middleware/data/topic/deleteTopicMW");
 const getAllTopicsOnlyMW = require("../middleware/data/topic/getAllTopicsOnlyMW");
 const getSingleTopicMW = require("../middleware/data/topic/getSingleTopicMW");
+const setApplicationForTopicMW = require("../middleware/data/topic/setApplicationForTopicMW");
 const createUserForRegisterMW = require("../middleware/data/user/createUserForRegisterMW");
 const getUserForLoginMW = require("../middleware/data/user/getUserForLoginMW");
 const getUserMW = require("../middleware/data/user/getUserMW");
@@ -17,12 +18,14 @@ const logUserInMW = require("../middleware/data/user/logUserInMW");
 const logUserOutMW = require("../middleware/data/user/logUserOutMW");
 const authenticateUserMW = require("../middleware/logic/auth/authenticateUserMW");
 const authenticateWithJWTMW = require("../middleware/logic/auth/authenticateWithJWTMW");
+const onlyStudentMW = require("../middleware/logic/auth/onlyStudentMW");
 const onlyTeacherMW = require("../middleware/logic/auth/onlyTeacherMW");
 const passwordHasherMW = require("../middleware/logic/auth/passwordHasherMW");
 const sendBackActualUserMW = require("../middleware/logic/auth/sendBackActualUserMW");
 const validatePasswordMW = require("../middleware/logic/auth/validatePasswordMW");
 const logIncomingCallMW = require("../middleware/logic/log/logIncomingCallMW");
 const sendJsonMW = require("../middleware/logic/sendJsonMW");
+const sendAllTopicsOnlyMW = require("../middleware/logic/topic/sendAllTopicsOnlyMW");
 const sendSingleTopicDataMW = require("../middleware/logic/topic/sendSingleTopicDataMW");
 const objRepo = require("../models/objecRepository");
 
@@ -92,6 +95,7 @@ module.exports = function (app) {
     authenticateWithJWTMW(),
     getUserMW(objRepo),
     getAllTopicsOnlyMW(objRepo),
+    sendAllTopicsOnlyMW(),
     sendJsonMW()
   );
 
@@ -122,6 +126,18 @@ module.exports = function (app) {
     getUserMW(objRepo),
     getSingleTopicMW(objRepo),
     sendSingleTopicDataMW(),
+    sendJsonMW()
+  );
+
+  app.put(
+    "/topics/:topicId/application",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    onlyStudentMW(),
+    getAllTopicsOnlyMW(objRepo),
+    setApplicationForTopicMW(objRepo),
+    sendAllTopicsOnlyMW(),
     sendJsonMW()
   );
 

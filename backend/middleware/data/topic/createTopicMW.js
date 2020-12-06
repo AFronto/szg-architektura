@@ -2,7 +2,6 @@ const requireOption = require("../../../config/requireOption");
 
 module.exports = function (objectrepository) {
   const Topic = requireOption(objectrepository, "Topic");
-  const Consultation = requireOption(objectrepository, "Consultation");
   return function (req, res, next) {
     console.log("Create Topic");
 
@@ -10,6 +9,7 @@ module.exports = function (objectrepository) {
       name: req.body.name,
       description: req.body.description,
       owner: req.user,
+      studentOnTopic: [],
       questions: [],
       deadlines: [],
       consultation: [],

@@ -9,25 +9,13 @@ module.exports = function (objectrepository) {
       .populate({
         path: "owner",
       })
+      .populate({
+        path: "studentOnTopic",
+      })
       .exec(function (err, topics) {
         if (err) return res.status(400).send("Cannot find topics!");
 
-        res.locals.retData = topics.map((t) => {
-          return {
-            id: t.id,
-            name: t.name,
-            description: t.description,
-            owner: {
-              id: t.owner.id,
-              email: t.owner.email,
-              userName: t.owner.userName,
-              isTeacher: t.owner.isTeacher,
-            },
-            questions: [],
-            deadlines: [],
-            consultation: [],
-          };
-        });
+        req.allTopic = topics;
         return next();
       });
   };

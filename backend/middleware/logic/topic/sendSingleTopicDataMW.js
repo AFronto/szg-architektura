@@ -20,6 +20,14 @@ module.exports = function () {
           isDone: d.isDone,
         };
       }),
+      studentOnTopic: req.topic.studentOnTopic.map((sOT) => {
+        return {
+          id: sOT.id,
+          email: sOT.email,
+          userName: sOT.userName,
+          isTeacher: sOT.isTeacher,
+        };
+      }),
       consultation: req.topic.consultation.map((c) => {
         return {
           id: c.id,
