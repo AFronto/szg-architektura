@@ -49,12 +49,12 @@ export const DeadlineCard: FunctionComponent<{
         style={
           deadline.isDone
             ? styleFinished
-            : new Date(Date.now()) < deadline.date
+            : new Date(Date.now()) < new Date(deadline.date)
             ? styleInProgress
             : styleDeadline
         }
       >
-        Deadline: {deadline.date.toDateString()}
+        Deadline: {deadline.date}
       </Card.Header>
       <Card.Body>
         <Row style={{ marginBottom: 20 }}>{deadline.description}</Row>

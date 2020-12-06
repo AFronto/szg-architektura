@@ -28,7 +28,7 @@ export const QuestionCard: FunctionComponent<{
       id: "fake_id",
       owner: {} as UserData,
       text: data.text,
-      creationDate: {} as Date,
+      creationDate: "",
     };
 
     dispatch(

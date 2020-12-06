@@ -32,7 +32,7 @@ export const QuestionList: FunctionComponent<{
       owner: {} as UserData,
       text: data.text,
       replies: [],
-      creationDate: {} as Date,
+      creationDate: "",
       isPrivate: questionList.isPrivate,
     };
 

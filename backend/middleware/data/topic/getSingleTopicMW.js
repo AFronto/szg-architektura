@@ -38,7 +38,9 @@ module.exports = function (objectrepository) {
         },
       })
       .exec(function (err, topics) {
-        if (err) return res.status(400).send("Cannot find topic!");
+        if (err) {
+          return res.status(400).send("Cannot find topic!");
+        }
 
         req.topic = topics[0];
         return next();

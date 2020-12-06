@@ -6,6 +6,6 @@ export default interface QuestionData {
   owner: UserData;
   text: string;
   replies: ReplyData[];
-  creationDate: Date;
+  creationDate: string;
   isPrivate: boolean;
 }

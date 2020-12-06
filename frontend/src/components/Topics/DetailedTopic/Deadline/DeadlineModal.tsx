@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FunctionComponent } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
@@ -7,6 +7,7 @@ import * as yup from "yup";
 import ModalModel from "../../../../data/ModalModel";
 import DeadlineData from "../../../../data/server/Topic/DeadlineData";
 import { addDeadline, updateDeadline } from "../../../../store/Topic";
+import { DatePicker } from "react-rainbow-components";
 
 export const DeadlineModal: FunctionComponent<{
   model: ModalModel;
@@ -19,17 +20,18 @@ export const DeadlineModal: FunctionComponent<{
 
   const schema = yup.object({
     description: yup.string().required(),
-    date: yup.string().required(),
   });
 
   const { register, handleSubmit, errors } = useForm({
     validationSchema: schema,
   });
 
+  const [deadlineDate, setDeadlineDate] = useState(new Date());
+
   const onSubmit = handleSubmit((data) => {
     const deadlineToSend = {
       id: props.deadline ? props.deadline.id : "fake_id",
-      date: new Date(data.date),
+      date: deadlineDate.toString(),
       description: data.description,
       link: props.deadline ? props.deadline.link : "",
       isDone: props.deadline ? props.deadline.isDone : false,
@@ -103,15 +105,9 @@ export const DeadlineModal: FunctionComponent<{
 
           <Form.Group controlId="formDeadlineDate">
             <Form.Label>Deadline Date</Form.Label>
-            <Form.Control
-              name="date"
-              type="text"
-              defaultValue={
-                props.deadline
-                  ? props.deadline.date.toDateString()
-                  : new Date(Date.now()).toDateString()
-              }
-              ref={register}
+            <DatePicker
+              value={deadlineDate}
+              onChange={(value) => setDeadlineDate(value)}
             />
           </Form.Group>
 

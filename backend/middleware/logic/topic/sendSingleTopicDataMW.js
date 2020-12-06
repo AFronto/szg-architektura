@@ -15,7 +15,7 @@ module.exports = function () {
         return {
           id: d.id,
           description: d.description,
-          date: d.date,
+          date: d.date.toString(),
           link: d.link,
           isDone: d.isDone,
         };
@@ -24,7 +24,7 @@ module.exports = function () {
         return {
           id: q.id,
           text: q.text,
-          creationDate: q.creationDate,
+          creationDate: q.creationDate.toString(),
           isPrivate: q.isPrivate,
           owner: {
             id: q.owner.id,
@@ -35,7 +35,7 @@ module.exports = function () {
           replies: q.replies.map((r) => {
             return {
               id: r.id,
-              creationDate: r.creationDate,
+              creationDate: r.creationDate.toString(),
               text: r.text,
               owner: {
                 id: r.owner.id,

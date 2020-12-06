@@ -24,6 +24,7 @@ module.exports = function (objectrepository) {
               isTeacher: t.owner.isTeacher,
             },
             questions: [],
+            deadlines: [],
           };
         });
         return next();

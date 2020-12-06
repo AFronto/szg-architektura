@@ -10,6 +10,7 @@ module.exports = function (objectrepository) {
       description: req.body.description,
       owner: req.user,
       questions: [],
+      deadlines: [],
     });
 
     topic.save(function (err, successful_topic) {

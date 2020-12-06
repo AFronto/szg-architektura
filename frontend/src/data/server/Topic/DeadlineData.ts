@@ -1,7 +1,7 @@
 export default interface DeadlineData {
   id: string;
   description: string;
-  date: Date;
+  date: string;
   link: string;
   isDone: boolean;
 }
