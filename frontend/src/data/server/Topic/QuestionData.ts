@@ -8,4 +8,5 @@ export default interface QuestionData {
   replies: ReplyData[];
   creationDate: string;
   isPrivate: boolean;
+  isClosed: boolean;
 }

@@ -13,12 +13,12 @@ export const DeadlineCard: FunctionComponent<{
   const { deadline } = props;
 
   const schema = yup.object({
-    name: yup.string().required(),
+    link: yup.string().required(),
   });
 
   const dispatch = useDispatch();
 
-  const { handleSubmit, errors } = useForm({
+  const { register, handleSubmit, errors } = useForm({
     validationSchema: schema,
   });
 
@@ -26,13 +26,30 @@ export const DeadlineCard: FunctionComponent<{
     dispatch(
       updateDeadline({
         parentTopicId: props.parentTopicId,
-        newDeadline: {},
+        newDeadline: {
+          id: deadline.id,
+          description: deadline.description,
+          date: deadline.date,
+          link: data.link,
+          isDone: deadline.isDone,
+        },
       })
     );
   });
 
   const switchStatus = () => {
-    //deadline.isDone ? dispatch() : dispatch();
+    dispatch(
+      updateDeadline({
+        parentTopicId: props.parentTopicId,
+        newDeadline: {
+          id: deadline.id,
+          description: deadline.description,
+          date: deadline.date,
+          link: deadline.link,
+          isDone: deadline.isDone ? false : true,
+        },
+      })
+    );
   };
 
   const styleInProgress = { background: "CornflowerBlue", color: "white" };
@@ -63,8 +80,23 @@ export const DeadlineCard: FunctionComponent<{
           <Col md={12}>
             <Form noValidate onSubmit={onSubmitLink}>
               <Form.Group controlId="formLink">
-                <Form.Control placeholder="Add the solution link to the deadline" />
+                <Form.Control
+                  name="link"
+                  type="text"
+                  ref={register}
+                  isInvalid={!!errors.link}
+                  placeholder="Add the solution link to the deadline"
+                />
               </Form.Group>
+              <Form.Control.Feedback type="invalid">
+                <h6>
+                  {errors.link
+                    ? Array.isArray(errors.link)
+                      ? errors.link[0].message
+                      : errors.link.message
+                    : ""}
+                </h6>
+              </Form.Control.Feedback>
               <div className="d-flex justify-content-between">
                 <Button variant="secondary" type="submit">
                   Add Link

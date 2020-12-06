@@ -56,6 +56,7 @@ export const WrapperCard: FunctionComponent<{
               />
             </Col>
           )}
+          {data.consultation !== undefined && <Col xs={12}>consultation</Col>}
         </Card.Body>
       )}
     </Card>

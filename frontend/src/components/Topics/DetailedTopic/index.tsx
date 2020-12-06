@@ -1,19 +1,17 @@
-import { push } from "connected-react-router";
 import React, {
   FunctionComponent,
   useCallback,
   useEffect,
   useState,
 } from "react";
-import { Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import { Button, Col, Row, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import * as yup from "yup";
 import { initializeScreen } from "../../../api/Auth";
-import { deleteTopic, getSingleTopic, getTopics } from "../../../api/Topic";
+import { deleteTopic, getSingleTopic } from "../../../api/Topic";
 import { ReduxState } from "../../../store";
-import { addQuestion, removeTopic, updateTopic } from "../../../store/Topic";
+import { removeTopic } from "../../../store/Topic";
+import { ConsultationModal } from "./Consultation/ConsultationModal";
 import { WrapperCard } from "./WrapperCard";
 
 export const DetailedTopicScreen: FunctionComponent = () => {
@@ -48,35 +46,16 @@ export const DetailedTopicScreen: FunctionComponent = () => {
     },
   ];
 
+  const consultation = {
+    id: "10",
+    date: "2020-12-10",
+    isStudentAccepted: true,
+    isTeacherAccepted: false,
+  };
   useEffect(() => {
     dispatch(initializeScreen());
     dispatch(getSingleTopic(id));
   }, []);
-
-  const schema = yup.object({
-    name: yup.string().required(),
-  });
-
-  const { handleSubmit, errors } = useForm({
-    validationSchema: schema,
-  });
-
-  const onSubmit = handleSubmit((data) => {
-    const questionToSend = {
-      id: data.id,
-      owner: data.owner,
-      text: data.questions,
-      replies: [],
-    };
-
-    dispatch(
-      addQuestion({
-        parentTopicId: id,
-        newReply: questionToSend,
-      })
-    );
-    //dispatch(createNewReply(replyToSend));
-  });
 
   const user = useSelector((state: ReduxState) => state.user);
 
@@ -85,18 +64,32 @@ export const DetailedTopicScreen: FunctionComponent = () => {
     dispatch(deleteTopic(topic!));
   };
 
+  const [show, setShow] = useState(false);
+
+  const handleClose = useCallback(() => setShow(false), [setShow]);
+  const handleShow = () => setShow(true);
+
   return (
     <>
       {topic !== undefined ? (
         <>
-          <div className="d-flex justify-content-between">
+          <Row>
             <h1>{topic.name}</h1>
+          </Row>
+          <div className="d-flex justify-content-between">
+            {user.isTeacher && (
+              <Button variant="primary" onClick={handleShow}>
+                Schedule Consultation
+              </Button>
+            )}
+
             {user.isTeacher && user.id === topic.owner.id && (
-              <Button size="lg" variant="danger" onClick={deleteTopicPressed}>
+              <Button variant="danger" onClick={deleteTopicPressed}>
                 Delete
               </Button>
             )}
           </div>
+
           <Row>
             <Col xs={12}>
               <WrapperCard
@@ -151,6 +144,23 @@ export const DetailedTopicScreen: FunctionComponent = () => {
               />
             </Col>
           </Row>
+          <Row>
+            <Col xs={12}>
+              <WrapperCard
+                data={{
+                  header: "Upcoming Consultation",
+                  show: false,
+                  parentTopicId: topic.id,
+                  consultation: consultation,
+                }}
+              />
+            </Col>
+          </Row>
+          <ConsultationModal
+            model={{ show, handleClose }}
+            isNew={true}
+            parentTopicId={topic.id}
+          />
         </>
       ) : (
         <div className="d-flex justify-content-center align-items-center h-100">

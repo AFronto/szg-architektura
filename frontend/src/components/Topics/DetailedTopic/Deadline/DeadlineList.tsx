@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useCallback, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
-import * as yup from "yup";
 import DeadlineData from "../../../../data/server/Topic/DeadlineData";
 import { DeadlineCard } from "./DeadlineCard";
 import { DeadlineModal } from "./DeadlineModal";
@@ -9,10 +8,6 @@ export const DeadlineList: FunctionComponent<{
   parentTopicId: string;
   deadlines: DeadlineData[];
 }> = (props) => {
-  const schema = yup.object({
-    name: yup.string().required(),
-  });
-
   const [show, setShow] = useState(false);
 
   const handleClose = useCallback(() => setShow(false), [setShow]);

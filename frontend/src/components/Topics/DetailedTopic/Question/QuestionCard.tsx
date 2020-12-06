@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { createNewReply } from "../../../../api/Topic";
 import QuestionData from "../../../../data/server/Topic/QuestionData";
 import UserData from "../../../../data/server/User/UserData";
-import { addReply } from "../../../../store/Topic";
+import { addReply, updateQuestion } from "../../../../store/Topic";
 import { Reply } from "./ReplyCard";
 
 export const QuestionCard: FunctionComponent<{
@@ -41,6 +41,25 @@ export const QuestionCard: FunctionComponent<{
     dispatch(createNewReply(props.topicId, props.question.id, replyToSend));
   });
 
+  const handleStatusChange = () => {
+    updateQuestion({
+      parentTopicId: props.topicId,
+      questionId: props.question.id,
+      updatedQuestion: {
+        id: props.question.id,
+        owner: props.question.owner,
+        text: props.question.text,
+        replies: props.question.replies,
+        creationDate: props.question.creationDate,
+        isPrivate: props.question.isPrivate,
+        isClosed: props.question.isClosed ? false : true,
+      },
+    });
+  };
+
+  const styleClosed = { background: "MediumSeaGreen", color: "white" };
+  const styleOpen = { background: "IndianRed", color: "white" };
+
   return (
     <>
       <Card
@@ -48,8 +67,18 @@ export const QuestionCard: FunctionComponent<{
         className="mx-auto"
         border="primary"
       >
-        <Card.Header style={{ background: "#7E0000", color: "white" }}>
-          {props.question.owner.userName}
+        <Card.Header style={props.question.isClosed ? styleClosed : styleOpen}>
+          <div className="d-flex justify-content-between">
+            {props.question.owner.userName}
+            <Button
+              variant="secondary"
+              onClick={() => {
+                handleStatusChange();
+              }}
+            >
+              {props.question.isClosed ? "Open" : "Close"}
+            </Button>
+          </div>
         </Card.Header>
         <Card.Body>{props.question.text}</Card.Body>
       </Card>

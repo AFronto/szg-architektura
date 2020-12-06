@@ -34,6 +34,7 @@ export const QuestionList: FunctionComponent<{
       replies: [],
       creationDate: "",
       isPrivate: questionList.isPrivate,
+      isClosed: false,
     };
 
     dispatch(
