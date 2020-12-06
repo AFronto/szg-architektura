@@ -80,6 +80,17 @@ export const ConsultationModal: FunctionComponent<{
     </Button>
   );
 
+  var questinsWithNormalizedText = props.questions
+    .map((question) => {
+      return {
+        ...question,
+        text:
+          question.text.substr(0, 30) +
+          (question.text.length > 30 ? "..." : ""),
+      };
+    })
+    .filter((q) => !q.isClosed);
+
   return (
     <Modal centered show={show} onHide={handleClose}>
       <Modal.Header closeButton>
@@ -87,27 +98,32 @@ export const ConsultationModal: FunctionComponent<{
       </Modal.Header>
       <Modal.Body>
         <Form noValidate onSubmit={onSubmit}>
-          <Form.Group controlId="formThreadTags">
-            <Form.Label>Questions</Form.Label>
-            <div className="clearfix">
-              <Typeahead
-                id="tag-selection"
-                labelKey="id"
-                multiple={true}
-                defaultSelected={props.questions.filter((question) => question)}
-                options={props.questions}
-                onChange={setSelected}
-                placeholder="Choose a question..."
-              />
-            </div>
-          </Form.Group>
-
           <Form.Group controlId="formDeadlineDate">
             <Form.Label>Deadline Date</Form.Label>
             <DatePicker
               value={consultationDate}
               onChange={(value) => setConsultationDate(value)}
             />
+          </Form.Group>
+          <Form.Group controlId="formQuestionSelection">
+            <Form.Label>Questions</Form.Label>
+            <div
+              className="clearfix"
+              style={{
+                maxHeight: "200px",
+                overflowY: "auto",
+              }}
+            >
+              <Typeahead
+                id="question-selection"
+                labelKey="text"
+                multiple={true}
+                defaultSelected={questinsWithNormalizedText}
+                options={questinsWithNormalizedText}
+                onChange={setSelected}
+                placeholder="Choose a question..."
+              />
+            </div>
           </Form.Group>
 
           <div className="d-flex justify-content-end">
