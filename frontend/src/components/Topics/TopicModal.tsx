@@ -10,6 +10,7 @@ import ModalModel from "../../data/ModalModel";
 import UserData from "../../data/server/User/UserData";
 import DeadlineData from "../../data/server/Topic/DeadlineData";
 import QuestionData from "../../data/server/Topic/QuestionData";
+import ConsultationData from "../../data/server/Topic/ConsultationData";
 
 export const TopicModal: FunctionComponent<{
   model: ModalModel;
@@ -35,6 +36,9 @@ export const TopicModal: FunctionComponent<{
       owner: props.topic ? props.topic.owner : ({} as UserData),
       questions: props.topic ? props.topic.questions : ([] as QuestionData[]),
       deadlines: props.topic ? props.topic.deadlines : ([] as DeadlineData[]),
+      consultation: props.topic
+        ? props.topic.consultation
+        : ({} as ConsultationData),
     };
 
     if (props.isNew) {

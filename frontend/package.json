@@ -20,6 +20,7 @@
     "connected-react-router": "^6.8.0",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.0",
+    "react-bootstrap-typeahead": "^5.1.2",
     "react-dom": "^17.0.1",
     "react-hook-form": "^5.5.1",
     "react-rainbow-components": "^1.21.0",
@@ -58,6 +59,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-bootstrap-typeahead": "^5.1.0",
     "@types/yup": "^0.29.9"
   }
 }

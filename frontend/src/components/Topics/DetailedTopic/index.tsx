@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { initializeScreen } from "../../../api/Auth";
 import { deleteTopic, getSingleTopic } from "../../../api/Topic";
+import QuestionData from "../../../data/server/Topic/QuestionData";
 import { ReduxState } from "../../../store";
 import { removeTopic } from "../../../store/Topic";
 import { ConsultationModal } from "./Consultation/ConsultationModal";
@@ -22,33 +23,10 @@ export const DetailedTopicScreen: FunctionComponent = () => {
     (t) => t.id === id
   );
 
-  const deadlines = [
-    {
-      id: "1",
-      description: "login screen",
-      date: "2020-11-30",
-      link: "link",
-      isDone: true,
-    },
-    {
-      id: "2",
-      description: "logout screen",
-      date: "2020-12-01",
-      link: "link",
-      isDone: false,
-    },
-    {
-      id: "3",
-      description: "backend",
-      date: "2020-12-30",
-      link: "link",
-      isDone: false,
-    },
-  ];
-
   const consultation = {
     id: "10",
     date: "2020-12-10",
+    questions: [] as QuestionData[],
     isStudentAccepted: true,
     isTeacherAccepted: false,
   };
@@ -139,7 +117,7 @@ export const DetailedTopicScreen: FunctionComponent = () => {
                   header: "Deadlines",
                   show: false,
                   parentTopicId: topic.id,
-                  deadlines: deadlines,
+                  deadlines: topic.deadlines,
                 }}
               />
             </Col>
@@ -160,6 +138,7 @@ export const DetailedTopicScreen: FunctionComponent = () => {
             model={{ show, handleClose }}
             isNew={true}
             parentTopicId={topic.id}
+            questions={topic.questions}
           />
         </>
       ) : (

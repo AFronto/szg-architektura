@@ -1,4 +1,5 @@
 import UserData from "../User/UserData";
+import ConsultationData from "./ConsultationData";
 import DeadlineData from "./DeadlineData";
 import QuestionData from "./QuestionData";
 
@@ -9,4 +10,5 @@ export default interface TopicData {
   owner: UserData;
   questions: QuestionData[];
   deadlines: DeadlineData[];
+  consultation: ConsultationData;
 }

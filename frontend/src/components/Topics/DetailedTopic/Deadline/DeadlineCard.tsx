@@ -1,10 +1,11 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useCallback, useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
 import DeadlineData from "../../../../data/server/Topic/DeadlineData";
 import { updateDeadline } from "../../../../store/Topic";
+import { DeadlineModal } from "./DeadlineModal";
 
 export const DeadlineCard: FunctionComponent<{
   parentTopicId: string;
@@ -22,11 +23,17 @@ export const DeadlineCard: FunctionComponent<{
     validationSchema: schema,
   });
 
+  const [show, setShow] = useState(false);
+
+  const handleClose = useCallback(() => setShow(false), [setShow]);
+  const handleShow = () => setShow(true);
+
   const onSubmitLink = handleSubmit((data) => {
     dispatch(
       updateDeadline({
         parentTopicId: props.parentTopicId,
-        newDeadline: {
+        deadlineId: deadline.id,
+        updatedDeadline: {
           id: deadline.id,
           description: deadline.description,
           date: deadline.date,
@@ -41,7 +48,8 @@ export const DeadlineCard: FunctionComponent<{
     dispatch(
       updateDeadline({
         parentTopicId: props.parentTopicId,
-        newDeadline: {
+        deadlineId: deadline.id,
+        updatedDeadline: {
           id: deadline.id,
           description: deadline.description,
           date: deadline.date,
@@ -82,7 +90,7 @@ export const DeadlineCard: FunctionComponent<{
               <Form.Group controlId="formLink">
                 <Form.Control
                   name="link"
-                  type="text"
+                  type="link"
                   ref={register}
                   isInvalid={!!errors.link}
                   placeholder="Add the solution link to the deadline"
@@ -104,12 +112,20 @@ export const DeadlineCard: FunctionComponent<{
                 <Button variant="secondary" onClick={switchStatus}>
                   {deadline.isDone ? "Reopen" : "Finish"}
                 </Button>
-                <Button variant="secondary">Edit deadline</Button>
+                <Button variant="secondary" onClick={handleShow}>
+                  Edit deadline
+                </Button>
               </div>
             </Form>
           </Col>
         </Row>
       </Card.Body>
+      <DeadlineModal
+        model={{ show, handleClose }}
+        isNew={false}
+        parentTopicId={props.parentTopicId}
+        deadline={deadline}
+      />
     </Card>
   );
 };

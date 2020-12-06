@@ -42,19 +42,16 @@ export const QuestionCard: FunctionComponent<{
   });
 
   const handleStatusChange = () => {
-    updateQuestion({
-      parentTopicId: props.topicId,
-      questionId: props.question.id,
-      updatedQuestion: {
-        id: props.question.id,
-        owner: props.question.owner,
-        text: props.question.text,
-        replies: props.question.replies,
-        creationDate: props.question.creationDate,
-        isPrivate: props.question.isPrivate,
-        isClosed: props.question.isClosed ? false : true,
-      },
-    });
+    dispatch(
+      updateQuestion({
+        parentTopicId: props.topicId,
+        questionId: props.question.id,
+        updatedQuestion: {
+          ...props.question,
+          isClosed: !props.question.isClosed,
+        },
+      })
+    );
   };
 
   const styleClosed = { background: "MediumSeaGreen", color: "white" };
@@ -69,13 +66,8 @@ export const QuestionCard: FunctionComponent<{
       >
         <Card.Header style={props.question.isClosed ? styleClosed : styleOpen}>
           <div className="d-flex justify-content-between">
-            {props.question.owner.userName}
-            <Button
-              variant="secondary"
-              onClick={() => {
-                handleStatusChange();
-              }}
-            >
+            {props.question.owner.userName}: {props.question.creationDate}
+            <Button variant="secondary" onClick={handleStatusChange}>
               {props.question.isClosed ? "Open" : "Close"}
             </Button>
           </div>

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import ConsultationData from "../../data/server/Topic/ConsultationData";
 import TopicData from "../../data/server/Topic/TopicData";
 
 const topicsSlice = createSlice({
@@ -144,6 +145,31 @@ const topicsSlice = createSlice({
       if (deadlineToDeleteIndex !== -1) {
         state[topicIndex].deadlines.splice(deadlineToDeleteIndex, 1);
       }
+      return state;
+    },
+
+    //Consultation Actions
+    addConsultation(state, action) {
+      var topicIndex = state.findIndex(
+        (t) => t.id === action.payload.parentTopicId
+      );
+      state[topicIndex].consultation = action.payload.newDeadline;
+      return state;
+    },
+    updateConsultation(state, action) {
+      var topicIndex = state.findIndex(
+        (t) => t.id === action.payload.parentTopicId
+      );
+      state[topicIndex].consultation = action.payload.updatedConsultation;
+
+      return state;
+    },
+    removeConsultation(state, action) {
+      var topicIndex = state.findIndex(
+        (t) => t.id === action.payload.parentTopicId
+      );
+      state[topicIndex].consultation = {} as ConsultationData;
+
       return state;
     },
   },
