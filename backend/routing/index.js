@@ -1,3 +1,4 @@
+const createDeadlineMW = require("../middleware/data/deadline/createDeadlineMW");
 const createQuestionMW = require("../middleware/data/question/createQuestionMW");
 const createReplyMW = require("../middleware/data/reply/createReplyMW");
 const createTopicMW = require("../middleware/data/topic/createTopicMW");
@@ -136,6 +137,16 @@ module.exports = function (app) {
     getUserMW(objRepo),
     getSingleTopicMW(objRepo),
     createReplyMW(objRepo),
+    sendJsonMW()
+  );
+
+  app.post(
+    "/topics/:topicId/deadline",
+    logIncomingCallMW(),
+    authenticateWithJWTMW(),
+    getUserMW(objRepo),
+    getSingleTopicMW(objRepo),
+    createDeadlineMW(objRepo),
     sendJsonMW()
   );
 };

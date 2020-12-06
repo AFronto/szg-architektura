@@ -14,10 +14,13 @@ import {
   removeQuestion,
   updateReply,
   removeReply,
+  updateDeadline,
+  removeDeadline,
 } from "../../store/Topic";
 import { push } from "connected-react-router";
 import QuestionData from "../../data/server/Topic/QuestionData";
 import ReplyData from "../../data/server/Topic/ReplyData";
+import DeadlineData from "../../data/server/Topic/DeadlineData";
 
 export function getTopics() {
   return (dispatch: AppDispatch, getState: () => ReduxState) => {
@@ -298,6 +301,53 @@ export function createNewReply(
         dispatch(
           addError({
             name: "createReplyError",
+            description: error.response.data,
+          })
+        );
+        if (error.response.status === 401) {
+          logOutLocally(dispatch);
+        }
+      }
+    );
+  };
+}
+
+export function createNewDeadline(topicId: string, deadline: DeadlineData) {
+  return (dispatch: AppDispatch, getState: () => ReduxState) => {
+    const header = generateAuthenticationHeader(getState());
+
+    return axios({
+      method: "POST",
+      url: `${serverBaseUrl}topics/${topicId}/deadline`,
+      headers: header,
+      data: deadline,
+    }).then(
+      (success) => {
+        if (
+          success.data.logedOut !== undefined &&
+          success.data.logedOut === true
+        ) {
+          logOutLocally(dispatch);
+        } else {
+          dispatch(
+            updateDeadline({
+              parentTopicId: topicId,
+              deadlineId: deadline.id,
+              updatedDeadline: { ...deadline, id: success.data.id },
+            })
+          );
+        }
+      },
+      (error) => {
+        dispatch(
+          removeDeadline({
+            parentTopicId: topicId,
+            deadlineId: deadline.id,
+          })
+        );
+        dispatch(
+          addError({
+            name: "createDeadlineError",
             description: error.response.data,
           })
         );
