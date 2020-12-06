@@ -2,6 +2,7 @@ const requireOption = require("../../../config/requireOption");
 
 module.exports = function (objectrepository) {
   const Topic = requireOption(objectrepository, "Topic");
+  const Consultation = requireOption(objectrepository, "Consultation");
   return function (req, res, next) {
     console.log("Create Topic");
 
@@ -11,11 +12,12 @@ module.exports = function (objectrepository) {
       owner: req.user,
       questions: [],
       deadlines: [],
-      consultation: {},
+      consultation: [],
     });
 
     topic.save(function (err, successful_topic) {
       if (err) {
+        console.log(err);
         return res.status(400).send("Cannot create topic!");
       }
       res.locals.retData = {

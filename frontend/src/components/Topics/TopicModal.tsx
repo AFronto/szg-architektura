@@ -38,7 +38,7 @@ export const TopicModal: FunctionComponent<{
       deadlines: props.topic ? props.topic.deadlines : ([] as DeadlineData[]),
       consultation: props.topic
         ? props.topic.consultation
-        : ({} as ConsultationData),
+        : ([] as ConsultationData[]),
     };
 
     if (props.isNew) {

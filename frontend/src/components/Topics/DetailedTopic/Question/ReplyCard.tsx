@@ -6,7 +6,7 @@ export const Reply: FunctionComponent<{ reply: ReplyData }> = (props) => {
   return (
     <>
       <Card style={{ marginBottom: 20 }} className="mx-auto" border="primary">
-        <Card.Header style={{ background: "GoldenRod" }}>
+        <Card.Header style={{ background: "Moccasin" }}>
           {props.reply.owner.userName}
         </Card.Header>
         <Card.Body>{props.reply.text}</Card.Body>

@@ -10,5 +10,5 @@ export default interface TopicData {
   owner: UserData;
   questions: QuestionData[];
   deadlines: DeadlineData[];
-  consultation: ConsultationData;
+  consultation: ConsultationData[];
 }

@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { initializeScreen } from "../../../api/Auth";
 import { deleteTopic, getSingleTopic } from "../../../api/Topic";
-import QuestionData from "../../../data/server/Topic/QuestionData";
 import { ReduxState } from "../../../store";
 import { removeTopic } from "../../../store/Topic";
 import { ConsultationModal } from "./Consultation/ConsultationModal";
@@ -23,13 +22,6 @@ export const DetailedTopicScreen: FunctionComponent = () => {
     (t) => t.id === id
   );
 
-  const consultation = {
-    id: "10",
-    date: "2020-12-10",
-    questions: [] as QuestionData[],
-    isStudentAccepted: true,
-    isTeacherAccepted: false,
-  };
   useEffect(() => {
     dispatch(initializeScreen());
     dispatch(getSingleTopic(id));
@@ -55,7 +47,7 @@ export const DetailedTopicScreen: FunctionComponent = () => {
             <h1>{topic.name}</h1>
           </Row>
           <div className="d-flex justify-content-between">
-            {user.isTeacher && (
+            {!user.isTeacher && topic.consultation.length === 0 && (
               <Button variant="primary" onClick={handleShow}>
                 Schedule Consultation
               </Button>
@@ -89,7 +81,9 @@ export const DetailedTopicScreen: FunctionComponent = () => {
                   parentTopicId: topic.id,
                   questionList: {
                     isPrivate: false,
-                    questions: topic.questions,
+                    renderReplies: true,
+                    renderSubmitQuestion: true,
+                    questions: topic.questions.filter((q) => !q.isPrivate),
                   },
                 }}
               />
@@ -104,7 +98,9 @@ export const DetailedTopicScreen: FunctionComponent = () => {
                   parentTopicId: topic.id,
                   questionList: {
                     isPrivate: true,
-                    questions: topic.questions,
+                    renderReplies: true,
+                    renderSubmitQuestion: true,
+                    questions: topic.questions.filter((q) => q.isPrivate),
                   },
                 }}
               />
@@ -129,7 +125,7 @@ export const DetailedTopicScreen: FunctionComponent = () => {
                   header: "Upcoming Consultation",
                   show: false,
                   parentTopicId: topic.id,
-                  consultation: consultation,
+                  consultation: topic.consultation,
                 }}
               />
             </Col>
@@ -138,7 +134,7 @@ export const DetailedTopicScreen: FunctionComponent = () => {
             model={{ show, handleClose }}
             isNew={true}
             parentTopicId={topic.id}
-            questions={topic.questions}
+            questions={topic.questions.filter((q) => q.isPrivate)}
           />
         </>
       ) : (

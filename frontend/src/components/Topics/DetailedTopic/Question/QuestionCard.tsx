@@ -11,6 +11,7 @@ import { Reply } from "./ReplyCard";
 
 export const QuestionCard: FunctionComponent<{
   topicId: string;
+  renderReplies: boolean;
   question: QuestionData;
 }> = (props) => {
   const schema = yup.object({
@@ -77,29 +78,35 @@ export const QuestionCard: FunctionComponent<{
         </Card.Header>
         <Card.Body>{props.question.text}</Card.Body>
       </Card>
-      <Row>
-        {props.question.replies.map((reply) => (
-          <Col md={{ span: 10, offset: 1 }}>
-            <Reply reply={reply} />
-          </Col>
-        ))}
-      </Row>
-      <Col md={{ span: 10, offset: 1 }}>
-        <Form noValidate onSubmit={onSubmit}>
-          <Form.Group controlId="formReply">
-            <Form.Control
-              placeholder="Enter your reply"
-              name="text"
-              type="text"
-              ref={register}
-            />
-          </Form.Group>
+      {props.renderReplies && (
+        <>
+          <Row>
+            {props.question.replies.map((reply) => (
+              <Col md={{ span: 10, offset: 1 }}>
+                <Reply reply={reply} />
+              </Col>
+            ))}
+          </Row>
+          <Row>
+            <Col md={{ span: 10, offset: 1 }}>
+              <Form noValidate onSubmit={onSubmit}>
+                <Form.Group controlId="formReply">
+                  <Form.Control
+                    placeholder="Enter your reply"
+                    name="text"
+                    type="text"
+                    ref={register}
+                  />
+                </Form.Group>
 
-          <Button variant="secondary" type="submit">
-            Reply
-          </Button>
-        </Form>
-      </Col>
+                <Button variant="secondary" type="submit">
+                  Reply
+                </Button>
+              </Form>
+            </Col>
+          </Row>
+        </>
+      )}
     </>
   );
 };

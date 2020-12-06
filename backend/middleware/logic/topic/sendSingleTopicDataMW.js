@@ -20,28 +20,30 @@ module.exports = function () {
           isDone: d.isDone,
         };
       }),
-      consultation: {
-        id: req.topic.consultation.id,
-        date: req.topic.consultation.date.toString(),
-        questions: req.topic.consultation.questions.map((q) => {
-          return {
-            id: q.id,
-            text: q.text,
-            creationDate: q.creationDate.toString(),
-            isPrivate: q.isPrivate,
-            isClosed: q.isClosed,
-            owner: {
-              id: q.owner.id,
-              email: q.owner.email,
-              userName: q.owner.userName,
-              isTeacher: q.owner.isTeacher,
-            },
-            replies: [],
-          };
-        }),
-        status: req.topic.consultation.status,
-        lastModified: req.topic.consultation.lastModified,
-      },
+      consultation: req.topic.consultation.map((c) => {
+        return {
+          id: c.id,
+          date: c.date.toString(),
+          questions: c.questions.map((q) => {
+            return {
+              id: q.id,
+              text: q.text,
+              creationDate: q.creationDate.toString(),
+              isPrivate: q.isPrivate,
+              isClosed: q.isClosed,
+              owner: {
+                id: q.owner.id,
+                email: q.owner.email,
+                userName: q.owner.userName,
+                isTeacher: q.owner.isTeacher,
+              },
+              replies: [],
+            };
+          }),
+          status: c.status,
+          lastModified: c.lastModified,
+        };
+      }),
       questions: req.topic.questions.map((q) => {
         return {
           id: q.id,

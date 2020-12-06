@@ -21,7 +21,7 @@ module.exports = function (objectrepository) {
       });
     });
 
-    if (req.topic.cosultation.id) {
+    if (req.topic.consultation[0].id) {
       Consultation.deleteOne({ _id: req.topic.consultation.id }).exec((err) => {
         if (err !== null) {
           console.log(`Deleting Consultation Error: ${err}`);

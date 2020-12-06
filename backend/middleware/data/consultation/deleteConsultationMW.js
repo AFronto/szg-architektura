@@ -6,7 +6,7 @@ module.exports = function (objectrepository) {
   return function (req, res, next) {
     console.log("Delete Consultation");
 
-    var consultation = req.topic.consultation;
+    var consultation = req.topic.consultation[0];
 
     Consultation.deleteOne({ _id: consultation.id }).exec((err) => {
       if (err !== null) {

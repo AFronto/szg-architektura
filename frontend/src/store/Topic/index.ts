@@ -153,14 +153,14 @@ const topicsSlice = createSlice({
       var topicIndex = state.findIndex(
         (t) => t.id === action.payload.parentTopicId
       );
-      state[topicIndex].consultation = action.payload.newDeadline;
+      state[topicIndex].consultation.push(action.payload.newConsultation);
       return state;
     },
     updateConsultation(state, action) {
       var topicIndex = state.findIndex(
         (t) => t.id === action.payload.parentTopicId
       );
-      state[topicIndex].consultation = action.payload.updatedConsultation;
+      state[topicIndex].consultation[0] = action.payload.updatedConsultation;
 
       return state;
     },
@@ -168,7 +168,7 @@ const topicsSlice = createSlice({
       var topicIndex = state.findIndex(
         (t) => t.id === action.payload.parentTopicId
       );
-      state[topicIndex].consultation = {} as ConsultationData;
+      state[topicIndex].consultation.splice(0, 1);
 
       return state;
     },
@@ -195,6 +195,11 @@ export const {
   addDeadline,
   updateDeadline,
   removeDeadline,
+
+  //Consultation Actions
+  addConsultation,
+  updateConsultation,
+  removeConsultation,
 } = topicsSlice.actions;
 
 export default topicsSlice.reducer;

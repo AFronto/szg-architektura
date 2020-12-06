@@ -9,5 +9,5 @@ export default interface WrapperData {
   description?: string;
   questionList?: QuestionListData;
   deadlines?: DeadlineData[];
-  consultation?: ConsultationData;
+  consultation?: ConsultationData[];
 }

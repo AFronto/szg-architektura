@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FunctionComponent } from "react";
 import { Button, Card, Col } from "react-bootstrap";
 import WrapperData from "../../../data/client/Wrapper/WrapperData";
-import { DeadlineCard } from "./Deadline/DeadlineCard";
+import { ConsultationCard } from "./Consultation/ConsultationCard";
 import { DeadlineList } from "./Deadline/DeadlineList";
 import { QuestionList } from "./Question/QuestionList";
 
@@ -56,7 +56,14 @@ export const WrapperCard: FunctionComponent<{
               />
             </Col>
           )}
-          {data.consultation !== undefined && <Col xs={12}>consultation</Col>}
+          {data.consultation !== undefined && (
+            <Col xs={12}>
+              <ConsultationCard
+                parentTopicId={data.parentTopicId}
+                consultation={data.consultation}
+              />
+            </Col>
+          )}
         </Card.Body>
       )}
     </Card>

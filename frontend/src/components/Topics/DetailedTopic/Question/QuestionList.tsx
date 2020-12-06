@@ -51,37 +51,42 @@ export const QuestionList: FunctionComponent<{
       <Row>
         {questionList.questions.map((question) => (
           <Col xs={12}>
-            <QuestionCard topicId={props.parentTopicId} question={question} />
+            <QuestionCard
+              topicId={props.parentTopicId}
+              renderReplies={props.questionList.renderReplies}
+              question={question}
+            />
           </Col>
         ))}
       </Row>
       <Row>
-        <Col md={12} style={{ marginTop: 40 }}>
-          <Form noValidate onSubmit={onSubmit}>
-            <Form.Group controlId="formQuestion">
-              <Form.Control
-                placeholder="Enter your question"
-                name="text"
-                type="text"
-                ref={register}
-                isInvalid={!!errors.text}
-              />
-              <Form.Control.Feedback type="invalid">
-                <h6>
-                  {errors.text
-                    ? Array.isArray(errors.text)
-                      ? errors.text[0].message
-                      : errors.text.message
-                    : ""}
-                </h6>
-              </Form.Control.Feedback>
-            </Form.Group>
-
-            <Button variant="secondary" type="submit">
-              Post your question!
-            </Button>
-          </Form>
-        </Col>
+        {props.questionList.renderSubmitQuestion && (
+          <Col md={12} style={{ marginTop: 40 }}>
+            <Form noValidate onSubmit={onSubmit}>
+              <Form.Group controlId="formQuestion">
+                <Form.Control
+                  placeholder="Enter your question"
+                  name="text"
+                  type="text"
+                  ref={register}
+                  isInvalid={!!errors.text}
+                />
+                <Form.Control.Feedback type="invalid">
+                  <h6>
+                    {errors.text
+                      ? Array.isArray(errors.text)
+                        ? errors.text[0].message
+                        : errors.text.message
+                      : ""}
+                  </h6>
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Button variant="secondary" type="submit">
+                Post your question!
+              </Button>
+            </Form>
+          </Col>
+        )}
       </Row>
     </>
   );

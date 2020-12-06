@@ -4,6 +4,6 @@ export default interface ConsultationData {
   id: string;
   date: string;
   questions: QuestionData[];
-  isStudentAccepted: boolean;
-  isTeacherAccepted: boolean;
+  lastModified: string; // student, teacher
+  status: string; // pending, accepted, rejected
 }
