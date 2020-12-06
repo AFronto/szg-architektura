@@ -6,7 +6,7 @@ module.exports = function (objectrepository) {
   return function (req, res, next) {
     console.log("Get Topic");
 
-    Topic.find({ _id: req.params.id })
+    Topic.find({ _id: req.params.topicId })
       .populate({
         path: "owner",
       })

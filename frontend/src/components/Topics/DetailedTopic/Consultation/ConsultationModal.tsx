@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,10 @@ import ConsultationData from "../../../../data/server/Topic/ConsultationData";
 import QuestionData from "../../../../data/server/Topic/QuestionData";
 import { addConsultation, updateConsultation } from "../../../../store/Topic";
 import { ReduxState } from "../../../../store";
+import {
+  createNewConsultation,
+  updateExistingConsultation,
+} from "../../../../api/Topic/ConsultationAPI";
 
 export const ConsultationModal: FunctionComponent<{
   model: ModalModel;
@@ -20,7 +24,7 @@ export const ConsultationModal: FunctionComponent<{
   const { show, handleClose } = props.model;
   const dispatch = useDispatch();
 
-  let questionsWithNormalizedText = props.questions
+  var questionsWithNormalizedText = props.questions
     .map((question) => {
       return {
         ...question,
@@ -30,27 +34,37 @@ export const ConsultationModal: FunctionComponent<{
       };
     })
     .filter((q) => !q.isClosed);
+  const [selected, setSelected] = useState(questionsWithNormalizedText);
+  useEffect(() => {
+    questionsWithNormalizedText = props.questions
+      .map((question) => {
+        return {
+          ...question,
+          text:
+            question.text.substr(0, 30) +
+            (question.text.length > 30 ? "..." : ""),
+        };
+      })
+      .filter((q) => !q.isClosed);
+    setSelected(questionsWithNormalizedText);
+  }, [props.questions]);
 
   const user = useSelector((state: ReduxState) => state.user);
 
   const { handleSubmit } = useForm({});
 
   const [consultationDate, setConsultationDate] = useState(new Date());
-  const [selected, setSelected] = useState(questionsWithNormalizedText);
 
   const onSubmit = handleSubmit((data) => {
     const consultationToSend = {
       id: props.consultation ? props.consultation.id : "fake_id",
       date: consultationDate.toString(),
-      questions: selected.map((sq) =>
-        props.questions.find((q) => q.id === sq.id)
+      questions: selected.map(
+        (sq) => props.questions.find((q) => q.id === sq.id)!
       ),
       status: "pending",
       lastModified: user.isTeacher ? "teacher" : "student",
     };
-    console.log(props.questions);
-    console.log(selected);
-    console.log(consultationToSend.questions);
 
     if (props.isNew) {
       dispatch(
@@ -59,12 +73,21 @@ export const ConsultationModal: FunctionComponent<{
           newConsultation: consultationToSend,
         })
       );
+      dispatch(createNewConsultation(props.parentTopicId, consultationToSend));
     } else {
+      const oldConsultation = props.consultation!;
       dispatch(
         updateConsultation({
           parentTopicId: props.parentTopicId,
           updatedConsultation: consultationToSend,
         })
+      );
+      dispatch(
+        updateExistingConsultation(
+          props.parentTopicId,
+          oldConsultation,
+          consultationToSend
+        )
       );
     }
     handleClose();
@@ -106,26 +129,28 @@ export const ConsultationModal: FunctionComponent<{
               onChange={(value) => setConsultationDate(value)}
             />
           </Form.Group>
-          <Form.Group controlId="formQuestionSelection">
-            <Form.Label>Questions</Form.Label>
-            <div
-              className="clearfix"
-              style={{
-                maxHeight: "200px",
-                overflowY: "auto",
-              }}
-            >
-              <Typeahead
-                id="question-selection"
-                labelKey="text"
-                multiple={true}
-                defaultSelected={questionsWithNormalizedText}
-                options={questionsWithNormalizedText}
-                onChange={setSelected}
-                placeholder="Choose a question..."
-              />
-            </div>
-          </Form.Group>
+          {props.isNew && (
+            <Form.Group controlId="formQuestionSelection">
+              <Form.Label>Questions</Form.Label>
+              <div
+                className="clearfix"
+                style={{
+                  maxHeight: "200px",
+                  overflowY: "auto",
+                }}
+              >
+                <Typeahead
+                  id="question-selection"
+                  labelKey="text"
+                  multiple={true}
+                  defaultSelected={questionsWithNormalizedText}
+                  options={questionsWithNormalizedText}
+                  onChange={setSelected}
+                  placeholder="Choose a question..."
+                />
+              </div>
+            </Form.Group>
+          )}
 
           <div className="d-flex justify-content-end">
             {submitButton}

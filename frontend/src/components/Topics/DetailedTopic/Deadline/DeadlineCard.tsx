@@ -3,7 +3,7 @@ import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
-import { updateExistingDeadline } from "../../../../api/Topic";
+import { updateExistingDeadline } from "../../../../api/Topic/DeadlineAPI";
 import DeadlineData from "../../../../data/server/Topic/DeadlineData";
 import { updateDeadline } from "../../../../store/Topic";
 import { DeadlineModal } from "./DeadlineModal";

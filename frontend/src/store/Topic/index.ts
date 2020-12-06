@@ -51,6 +51,19 @@ const topicsSlice = createSlice({
         state[topicIndex].questions[questionToUpdateIndex] =
           action.payload.updatedQuestion;
       }
+      if (state[topicIndex].consultation.length > 0) {
+        var consultationQuestionToUpdateIndex = state[
+          topicIndex
+        ].consultation[0].questions.findIndex(
+          (question) => question.id === action.payload.questionId
+        );
+        if (consultationQuestionToUpdateIndex !== -1) {
+          state[topicIndex].consultation[0].questions[
+            consultationQuestionToUpdateIndex
+          ] = action.payload.updatedQuestion;
+        }
+      }
+
       return state;
     },
     removeQuestion(state, action) {

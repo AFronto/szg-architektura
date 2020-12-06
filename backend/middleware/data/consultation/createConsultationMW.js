@@ -8,7 +8,7 @@ module.exports = function (objectrepository) {
   return function (req, res, next) {
     console.log("Create Consultation");
 
-    Question.find({}).exec.exec(function (err_question, questions) {
+    Question.find({}).exec(function (err_question, questions) {
       var consultation = new Consultation({
         date: new Date(req.body.date),
         questions: questions.filter((q) => req.body.questions.includes(q)),

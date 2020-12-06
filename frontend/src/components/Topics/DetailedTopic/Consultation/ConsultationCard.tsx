@@ -2,6 +2,10 @@ import React, { useCallback, useState } from "react";
 import { FunctionComponent } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteConsultation,
+  updateExistingConsultation,
+} from "../../../../api/Topic/ConsultationAPI";
 import ConsultationData from "../../../../data/server/Topic/ConsultationData";
 import { ReduxState } from "../../../../store";
 import {
@@ -26,28 +30,46 @@ export const ConsultationCard: FunctionComponent<{
   const handleShow = () => setShow(true);
 
   const AcceptConsultation = () => {
+    let oldConsultation = consultation[0];
+    let newConsultation = {
+      ...consultation[0],
+      status: "accepted",
+      lastModified: user.isTeacher ? "teacher" : "student",
+    };
     dispatch(
       updateConsultation({
         parentTopicId: props.parentTopicId,
-        updatedConsultation: {
-          ...consultation,
-          status: "accepted",
-          lastModified: user.isTeacher ? "teacher" : "student",
-        },
+        updatedConsultation: newConsultation,
       })
+    );
+    dispatch(
+      updateExistingConsultation(
+        props.parentTopicId,
+        oldConsultation,
+        newConsultation
+      )
     );
   };
 
   const RejectConsultation = () => {
+    let oldConsultation = consultation[0];
+    let newConsultation = {
+      ...consultation[0],
+      status: "rejected",
+      lastModified: user.isTeacher ? "teacher" : "student",
+    };
     dispatch(
       updateConsultation({
         parentTopicId: props.parentTopicId,
-        updatedConsultation: {
-          ...consultation,
-          status: "rejected",
-          lastModified: user.isTeacher ? "teacher" : "student",
-        },
+        updatedConsultation: newConsultation,
       })
+    );
+    dispatch(
+      updateExistingConsultation(
+        props.parentTopicId,
+        oldConsultation,
+        newConsultation
+      )
     );
   };
 
@@ -57,6 +79,7 @@ export const ConsultationCard: FunctionComponent<{
         parentTopicId: props.parentTopicId,
       })
     );
+    dispatch(deleteConsultation(props.parentTopicId, consultation[0]));
   };
 
   var AcceptButton = (
@@ -183,6 +206,7 @@ export const ConsultationCard: FunctionComponent<{
             isNew={false}
             parentTopicId={props.parentTopicId}
             questions={consultation[0].questions}
+            consultation={consultation[0]}
           />
         </>
       )}

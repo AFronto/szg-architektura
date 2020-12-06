@@ -11,7 +11,7 @@ import { addDeadline, updateDeadline } from "../../../../store/Topic";
 import {
   createNewDeadline,
   updateExistingDeadline,
-} from "../../../../api/Topic";
+} from "../../../../api/Topic/DeadlineAPI";
 
 export const DeadlineModal: FunctionComponent<{
   model: ModalModel;

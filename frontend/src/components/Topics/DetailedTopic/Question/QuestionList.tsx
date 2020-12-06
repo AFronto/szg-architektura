@@ -4,7 +4,7 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
-import { createNewQuestion } from "../../../../api/Topic";
+import { createNewQuestion } from "../../../../api/Topic/QuestionAPI";
 import QuestionListData from "../../../../data/client/Question/QuestionListData";
 import UserData from "../../../../data/server/User/UserData";
 import { addQuestion } from "../../../../store/Topic";

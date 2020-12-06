@@ -106,7 +106,7 @@ module.exports = function (app) {
   );
 
   app.delete(
-    "/topics/:id",
+    "/topics/:topicId",
     logIncomingCallMW(),
     authenticateWithJWTMW(),
     getUserMW(objRepo),
@@ -116,7 +116,7 @@ module.exports = function (app) {
   );
 
   app.get(
-    "/topics/:id",
+    "/topics/:topicId",
     logIncomingCallMW(),
     authenticateWithJWTMW(),
     getUserMW(objRepo),
@@ -180,7 +180,7 @@ module.exports = function (app) {
   );
 
   app.put(
-    "/topics/:topicId/consultation/:consultationId",
+    "/topics/:topicId/consultation",
     logIncomingCallMW(),
     authenticateWithJWTMW(),
     getUserMW(objRepo),
