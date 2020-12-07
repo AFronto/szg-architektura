@@ -16,7 +16,7 @@ module.exports = function (objectrepository) {
       }
 
       req.user = users[0];
-      if (!req.user.isLogedIn) {
+      if (!req.user.isLoggedIn) {
         return res.send({
           logOutMessage: "You were loged out!",
           logedOut: true,

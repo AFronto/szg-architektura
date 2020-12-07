@@ -12,6 +12,9 @@ export const NavMenu: FunctionComponent = () => {
 
   const dispatch = useDispatch();
   const user = useSelector((state: ReduxState) => state.user);
+  const topic = useSelector((state: ReduxState) => state.topics).find(
+    (t) => t.studentOnTopic.length > 0 && t.studentOnTopic[0].id === user.id
+  )!;
 
   return (
     <Navbar fixed="top" bg="dark" variant="dark" expand="sm">
@@ -34,14 +37,40 @@ export const NavMenu: FunctionComponent = () => {
               >
                 All Topics
               </Link>
-              <Link
-                className={
-                  activePath === "/profile" ? "nav-link active" : "nav-link"
-                }
-                to="/profile"
-              >
-                Profile
-              </Link>
+              {!user.isTeacher ? (
+                topic !== undefined ? (
+                  <Link
+                    className={
+                      activePath === `/topics/${topic.id}`
+                        ? "nav-link active"
+                        : "nav-link"
+                    }
+                    to={`/topics/${topic.id}`}
+                  >
+                    My Topic
+                  </Link>
+                ) : (
+                  <Link
+                    className={
+                      activePath === `/no_topic`
+                        ? "nav-link active"
+                        : "nav-link"
+                    }
+                    to={`/no_topic`}
+                  >
+                    My Topic
+                  </Link>
+                )
+              ) : (
+                <Link
+                  className={
+                    activePath === `/my_topics` ? "nav-link active" : "nav-link"
+                  }
+                  to={`/my_topics`}
+                >
+                  My Topics
+                </Link>
+              )}
               <Nav.Link onClick={() => dispatch(logOut())}>Log Out</Nav.Link>
             </Nav>
           ) : (

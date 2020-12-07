@@ -9,6 +9,8 @@ import { LogInScreen } from "./components/Auth/LogIn";
 import { RegisterScreen } from "./components/Auth/Register";
 import { TopicsScreen } from "./components/Topics";
 import { DetailedTopicScreen } from "./components/Topics/DetailedTopic";
+import { NoTopicScreen } from "./components/Topics/NoTopic";
+import { TeacherOwnTopicsScreen } from "./components/Topics/TeacherOwnTopics";
 
 export default () => {
   return (
@@ -22,6 +24,12 @@ export default () => {
         </AuthenticatedRoute>
         <AuthenticatedRoute exact path="/topics">
           <TopicsScreen />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/no_topic">
+          <NoTopicScreen />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path="/my_topics">
+          <TeacherOwnTopicsScreen />
         </AuthenticatedRoute>
         <AuthenticatedRoute exact path="/topics/:id">
           <DetailedTopicScreen />

@@ -27,7 +27,7 @@ const logIncomingCallMW = require("../middleware/logic/log/logIncomingCallMW");
 const sendJsonMW = require("../middleware/logic/sendJsonMW");
 const sendAllTopicsOnlyMW = require("../middleware/logic/topic/sendAllTopicsOnlyMW");
 const sendSingleTopicDataMW = require("../middleware/logic/topic/sendSingleTopicDataMW");
-const objRepo = require("../models/objecRepository");
+const objRepo = require("../models/objectRepository");
 
 module.exports = function (app) {
   //Authentication

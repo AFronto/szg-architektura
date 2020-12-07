@@ -12,6 +12,8 @@ import { deleteTopic, getSingleTopic } from "../../../api/Topic";
 import { ReduxState } from "../../../store";
 import { removeTopic } from "../../../store/Topic";
 import { ConsultationModal } from "./Consultation/ConsultationModal";
+import { PrivatecDetails } from "./PrivateDetails";
+import { PublicDetails } from "./PublicDetails";
 import { WrapperCard } from "./WrapperCard";
 
 export const DetailedTopicScreen: FunctionComponent = () => {
@@ -47,89 +49,28 @@ export const DetailedTopicScreen: FunctionComponent = () => {
             <h1>{topic.name}</h1>
           </Row>
           <div className="d-flex justify-content-between">
-            {!user.isTeacher && topic.consultation.length === 0 && (
-              <Button variant="primary" onClick={handleShow}>
-                Schedule Consultation
-              </Button>
-            )}
-
+            {!user.isTeacher &&
+              topic.consultation.length === 0 &&
+              topic.studentOnTopic.length > 0 &&
+              topic.studentOnTopic[0].id === user.id && (
+                <Button variant="primary" onClick={handleShow}>
+                  Schedule Consultation
+                </Button>
+              )}
             {user.isTeacher && user.id === topic.owner.id && (
               <Button variant="danger" onClick={deleteTopicPressed}>
                 Delete
               </Button>
             )}
           </div>
-
-          <Row>
-            <Col xs={12}>
-              <WrapperCard
-                data={{
-                  header: "Topic Description",
-                  show: true,
-                  description: topic.description,
-                  parentTopicId: topic.id,
-                }}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <WrapperCard
-                data={{
-                  header: "Public Questions",
-                  show: true,
-                  parentTopicId: topic.id,
-                  questionList: {
-                    isPrivate: false,
-                    renderReplies: true,
-                    renderSubmitQuestion: true,
-                    questions: topic.questions.filter((q) => !q.isPrivate),
-                  },
-                }}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <WrapperCard
-                data={{
-                  header: "Private Questions",
-                  show: false,
-                  parentTopicId: topic.id,
-                  questionList: {
-                    isPrivate: true,
-                    renderReplies: true,
-                    renderSubmitQuestion: true,
-                    questions: topic.questions.filter((q) => q.isPrivate),
-                  },
-                }}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <WrapperCard
-                data={{
-                  header: "Deadlines",
-                  show: false,
-                  parentTopicId: topic.id,
-                  deadlines: topic.deadlines,
-                }}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <WrapperCard
-                data={{
-                  header: "Upcoming Consultation",
-                  show: false,
-                  parentTopicId: topic.id,
-                  consultation: topic.consultation,
-                }}
-              />
-            </Col>
-          </Row>
+          {(!user.isTeacher &&
+            topic.studentOnTopic.length > 0 &&
+            topic.studentOnTopic[0].id === user.id) ||
+          (user.isTeacher && user.id === topic.owner.id) ? (
+            <PrivatecDetails id={id} />
+          ) : (
+            <PublicDetails id={id} />
+          )}
           <ConsultationModal
             model={{ show, handleClose }}
             isNew={true}
