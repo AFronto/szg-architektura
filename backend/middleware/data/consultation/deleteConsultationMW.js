@@ -5,6 +5,9 @@ module.exports = function (objectrepository) {
 
   return function (req, res, next) {
     console.log("Delete Consultation");
+    if (req.topic.consultation.length === 0) {
+      return res.status(400).send("Cannot delete consultation!");
+    }
 
     var consultation = req.topic.consultation[0];
 

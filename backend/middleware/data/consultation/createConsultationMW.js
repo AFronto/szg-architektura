@@ -30,6 +30,9 @@ module.exports = function (objectrepository) {
           if (err_find) {
             return res.status(400).send("Cannot create consultation!");
           }
+          if (topics[0].consultation.length !== 0) {
+            return res.status(400).send("Cannot create consultation!");
+          }
           topics[0].consultation.push(successful_consultation);
           topics[0].save(function (err_add, _successful_add) {
             if (err_add) {

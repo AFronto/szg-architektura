@@ -21,14 +21,6 @@ module.exports = function (objectrepository) {
       });
     });
 
-    if (req.topic.consultation.length !== 0 && req.topic.consultation[0].id) {
-      Consultation.deleteOne({ _id: req.topic.consultation.id }).exec((err) => {
-        if (err !== null) {
-          console.log(`Deleting Consultation Error: ${err}`);
-        }
-      });
-    }
-
     req.topic.questions.forEach((q) => {
       q.replies.forEach((r) => {
         Reply.deleteOne({ _id: r.id }).exec((err) => {
@@ -45,12 +37,20 @@ module.exports = function (objectrepository) {
       });
     });
 
-    Topic.deleteOne({ _id: req.params.id }).exec((err) => {
+    if (req.topic.consultation.length !== 0 && req.topic.consultation[0].id) {
+      Consultation.deleteOne({ _id: req.topic.consultation.id }).exec((err) => {
+        if (err !== null) {
+          console.log(`Deleting Consultation Error: ${err}`);
+        }
+      });
+    }
+
+    Topic.deleteOne({ _id: req.params.topicId }).exec((err) => {
       if (err !== null) {
         console.log(`Deleting Topic Error: ${err}`);
       }
       res.locals.retData = res.locals.retData = {
-        id: req.params.id,
+        id: req.params.topicId,
       };
       return next();
     });
