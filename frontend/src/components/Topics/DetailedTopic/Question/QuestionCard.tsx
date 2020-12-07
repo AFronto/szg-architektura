@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { Button, Card, Col, Form, Row } from "react-bootstrap";
+import { Button, Card, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
@@ -21,7 +21,7 @@ export const QuestionCard: FunctionComponent<{
 
   const dispatch = useDispatch();
 
-  const { register, handleSubmit, errors } = useForm({
+  const { register, handleSubmit, errors, reset } = useForm({
     validationSchema: schema,
   });
 
@@ -41,6 +41,7 @@ export const QuestionCard: FunctionComponent<{
       })
     );
     dispatch(createNewReply(props.topicId, props.question.id, replyToSend));
+    reset();
   });
 
   const handleStatusChange = () => {
@@ -71,7 +72,8 @@ export const QuestionCard: FunctionComponent<{
       >
         <Card.Header style={props.question.isClosed ? styleClosed : styleOpen}>
           <div className="d-flex justify-content-between">
-            {props.question.owner.userName}: {props.question.creationDate}
+            {props.question.owner.userName}:
+            {new Date(props.question.creationDate).toLocaleString()}
             <Button variant="secondary" onClick={handleStatusChange}>
               {props.question.isClosed ? "Open" : "Close"}
             </Button>
@@ -92,17 +94,20 @@ export const QuestionCard: FunctionComponent<{
             <Col md={{ span: 10, offset: 1 }}>
               <Form noValidate onSubmit={onSubmit}>
                 <Form.Group controlId="formReply">
-                  <Form.Control
-                    placeholder="Enter your reply"
-                    name="text"
-                    type="text"
-                    ref={register}
-                  />
+                  <InputGroup className="mb-3 w-100">
+                    <Form.Control
+                      placeholder="Enter your reply"
+                      name="text"
+                      type="text"
+                      ref={register}
+                    />
+                    <InputGroup.Append>
+                      <Button variant="secondary" type="submit">
+                        Reply
+                      </Button>
+                    </InputGroup.Append>
+                  </InputGroup>
                 </Form.Group>
-
-                <Button variant="secondary" type="submit">
-                  Reply
-                </Button>
               </Form>
             </Col>
           </Row>

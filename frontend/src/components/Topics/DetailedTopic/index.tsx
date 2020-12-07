@@ -36,33 +36,22 @@ export const DetailedTopicScreen: FunctionComponent = () => {
     dispatch(deleteTopic(topic!));
   };
 
-  const [show, setShow] = useState(false);
-
-  const handleClose = useCallback(() => setShow(false), [setShow]);
-  const handleShow = () => setShow(true);
-
   return (
     <>
       {topic !== undefined ? (
         <>
           <Row>
-            <h1>{topic.name}</h1>
+            <Col xs={12}>
+              <div className="d-flex justify-content-between">
+                <h1>{topic.name}</h1>
+                {user.isTeacher && user.id === topic.owner.id && (
+                  <Button variant="danger" onClick={deleteTopicPressed}>
+                    Delete
+                  </Button>
+                )}
+              </div>
+            </Col>
           </Row>
-          <div className="d-flex justify-content-between">
-            {!user.isTeacher &&
-              topic.consultation.length === 0 &&
-              topic.studentOnTopic.length > 0 &&
-              topic.studentOnTopic[0].id === user.id && (
-                <Button variant="primary" onClick={handleShow}>
-                  Schedule Consultation
-                </Button>
-              )}
-            {user.isTeacher && user.id === topic.owner.id && (
-              <Button variant="danger" onClick={deleteTopicPressed}>
-                Delete
-              </Button>
-            )}
-          </div>
           {(!user.isTeacher &&
             topic.studentOnTopic.length > 0 &&
             topic.studentOnTopic[0].id === user.id) ||
@@ -71,12 +60,6 @@ export const DetailedTopicScreen: FunctionComponent = () => {
           ) : (
             <PublicDetails id={id} />
           )}
-          <ConsultationModal
-            model={{ show, handleClose }}
-            isNew={true}
-            parentTopicId={topic.id}
-            questions={topic.questions.filter((q) => q.isPrivate)}
-          />
         </>
       ) : (
         <div className="d-flex justify-content-center align-items-center h-100">

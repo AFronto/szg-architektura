@@ -29,6 +29,18 @@ export const PrivatecDetails: FunctionComponent<{
         <Col xs={12}>
           <WrapperCard
             data={{
+              header: "Upcoming Consultation",
+              show: true,
+              parentTopicId: topic.id,
+              consultation: topic.consultation,
+            }}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={12}>
+          <WrapperCard
+            data={{
               header: "Private Questions",
               show: true,
               parentTopicId: topic.id,
@@ -38,18 +50,6 @@ export const PrivatecDetails: FunctionComponent<{
                 renderSubmitQuestion: true,
                 questions: topic.questions.filter((q) => q.isPrivate),
               },
-            }}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={12}>
-          <WrapperCard
-            data={{
-              header: "Upcoming Consultation",
-              show: false,
-              parentTopicId: topic.id,
-              consultation: topic.consultation,
             }}
           />
         </Col>

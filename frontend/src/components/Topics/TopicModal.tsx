@@ -1,11 +1,11 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
+import React, { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { Button, Form, Modal } from "react-bootstrap";
 import * as yup from "yup";
 import TopicData from "../../data/server/Topic/TopicData";
 import { addTopic, updateTopic } from "../../store/Topic";
-import { createNewTopic, editTopic } from "../../api/Topic";
+import { createNewTopic } from "../../api/Topic";
 import ModalModel from "../../data/ModalModel";
 import UserData from "../../data/server/User/UserData";
 import DeadlineData from "../../data/server/Topic/DeadlineData";

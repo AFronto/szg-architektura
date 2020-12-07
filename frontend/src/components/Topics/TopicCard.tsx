@@ -13,8 +13,8 @@ export const TopicCard: FunctionComponent<{ topic: TopicData }> = (props) => {
   return (
     <Card style={{ marginBottom: 40 }} className="mx-auto" border="primary">
       <Card.Header as="h5">
-        {props.topic.name}
-        <div className="d-flex justify-content-end">
+        <div className="d-flex justify-content-between">
+          <a>{props.topic.name}</a>
           {props.topic.studentOnTopic.length === 0 && !user.isTeacher && (
             <Button
               variant="success"

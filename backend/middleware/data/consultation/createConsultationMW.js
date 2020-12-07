@@ -11,7 +11,9 @@ module.exports = function (objectrepository) {
     Question.find({}).exec(function (err_question, questions) {
       var consultation = new Consultation({
         date: new Date(req.body.date),
-        questions: questions.filter((q) => req.body.questions.includes(q)),
+        questions: questions.filter((q) =>
+          req.body.questions.some((incomingQ) => incomingQ.id === q.id)
+        ),
         status: req.body.status,
         lastModified: req.body.lastModified,
       });

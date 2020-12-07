@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { Card, Col } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import ReplyData from "../../../../data/server/Topic/ReplyData";
 
 export const Reply: FunctionComponent<{ reply: ReplyData }> = (props) => {
@@ -7,7 +7,8 @@ export const Reply: FunctionComponent<{ reply: ReplyData }> = (props) => {
     <>
       <Card style={{ marginBottom: 20 }} className="mx-auto" border="primary">
         <Card.Header style={{ background: "Moccasin" }}>
-          {props.reply.owner.userName}
+          {props.reply.owner.userName}:
+          {new Date(props.reply.creationDate).toLocaleString()}
         </Card.Header>
         <Card.Body>{props.reply.text}</Card.Body>
       </Card>

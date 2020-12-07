@@ -14,6 +14,7 @@ import {
 } from "../../../../store/Topic";
 import { QuestionList } from "../Question/QuestionList";
 import { ConsultationModal } from "./ConsultationModal";
+import { FaCalendarAlt } from "react-icons/fa";
 
 export const ConsultationCard: FunctionComponent<{
   parentTopicId: string;
@@ -85,19 +86,15 @@ export const ConsultationCard: FunctionComponent<{
   var AcceptButton = (
     <Button
       variant="success"
-      className="border border-success"
+      className="border border-success mr-3"
       onClick={AcceptConsultation}
     >
       Accept
     </Button>
   );
   var RescheduleButton = (
-    <Button
-      variant="secondary"
-      className="border border-secondary"
-      onClick={handleShow}
-    >
-      Reschedule
+    <Button variant="outline-light" onClick={handleShow}>
+      <FaCalendarAlt />
     </Button>
   );
   var RejectButton = (
@@ -141,49 +138,55 @@ export const ConsultationCard: FunctionComponent<{
                   : styleRejected
               }
             >
-              {consultation[0].date}
+              <div className="d-flex justify-content-between">
+                <a>{new Date(consultation[0].date).toLocaleString()}</a>
+                {RescheduleButton}
+              </div>
             </Card.Header>
             <Card.Body>
               <>
-                {consultation[0].status === "accepted" && (
-                  <>Meeting accepted!</>
-                )}
-
-                {consultation[0].status === "rejected" && (
-                  <>Meeting was rejected!</>
-                )}
-
-                {user.isTeacher &&
-                  consultation[0].status === "pending" &&
-                  consultation[0].lastModified === "student" && (
-                    <>
-                      <Row> Meeting request.</Row>
-                      <Row>{AcceptButton}</Row>
-                    </>
-                  )}
-                {user.isTeacher &&
-                  consultation[0].status === "pending" &&
-                  consultation[0].lastModified === "teacher" && (
-                    <>Waiting for student to accept the meeting.</>
-                  )}
-
-                {!user.isTeacher &&
-                  consultation[0].status === "pending" &&
-                  consultation[0].lastModified === "student" && (
-                    <>Waiting for teacher to accept the meeting.</>
-                  )}
-                {!user.isTeacher &&
-                  consultation[0].status === "pending" &&
-                  consultation[0].lastModified === "teacher" && (
-                    <>
-                      <Row> Meeting request.</Row>
-                      <Row>{AcceptButton}</Row>
-                    </>
-                  )}
                 <div className="d-flex justify-content-between">
-                  {RescheduleButton}
-                  {!user.isTeacher && <>{DeleteButton}</>}
-                  {user.isTeacher && <>{RejectButton}</>}
+                  {consultation[0].status === "accepted" && (
+                    <h6>Meeting accepted!</h6>
+                  )}
+
+                  {consultation[0].status === "rejected" && (
+                    <h6>Meeting was rejected!</h6>
+                  )}
+
+                  {user.isTeacher &&
+                    consultation[0].status === "pending" &&
+                    consultation[0].lastModified === "student" && (
+                      <h6>Meeting request.</h6>
+                    )}
+                  {user.isTeacher &&
+                    consultation[0].status === "pending" &&
+                    consultation[0].lastModified === "teacher" && (
+                      <h6>Waiting for student to accept the meeting.</h6>
+                    )}
+
+                  {!user.isTeacher &&
+                    consultation[0].status === "pending" &&
+                    consultation[0].lastModified === "student" && (
+                      <h6>Waiting for teacher to accept the meeting.</h6>
+                    )}
+                  {!user.isTeacher &&
+                    consultation[0].status === "pending" &&
+                    consultation[0].lastModified === "teacher" && (
+                      <h6>Meeting request.</h6>
+                    )}
+                  <div>
+                    {((user.isTeacher &&
+                      consultation[0].status === "pending" &&
+                      consultation[0].lastModified === "student") ||
+                      (!user.isTeacher &&
+                        consultation[0].status === "pending" &&
+                        consultation[0].lastModified === "teacher")) && (
+                      <>{AcceptButton}</>
+                    )}
+                    {!user.isTeacher && <>{DeleteButton}</>}
+                    {user.isTeacher && <>{RejectButton}</>}
+                  </div>
                 </div>
                 <Row>
                   <Col xs={12}>
